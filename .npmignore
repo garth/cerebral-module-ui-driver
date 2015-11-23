@@ -1,0 +1,7 @@
+// same as .gitignore
+*.log
+node_modules
+
+// .npmignore only
+src
+test
