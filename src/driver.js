@@ -26,13 +26,18 @@ export default {
         };
       },
 
-      getBindings(props, t) {
+      getBindings(props, t=null) {
         validationFields = [];
+        const translate = t === null;
+        if (!translate) {
+          t = {};
+        }
 
         const inputProps = function (name, {
           label = null,
           value = props.driverMeta && props.driverMeta[name] && props.driverMeta[name].inputValue,
           format = value => value === null ? '' : value,
+          messages = {},
           validationType = 'string',
           required = false,
           signalData = {}
@@ -49,12 +54,18 @@ export default {
             validationKeyStatePath: [...formPath, 'validation', name],
             statePath,
             validationType,
+            validateKeyPrefix: translate ? name : '',
             required
           }, signalData);
           validationFields.push(signalInput);
           let message = '';
           if (isError) {
-            message = t[validationKey] ? t[validationKey]() : validationKey;
+            if (translate) {
+              message = t[validationKey] ? t[validationKey]() : validationKey;
+            } else {
+              let key = validationKey.toLowerCase();
+              message = messages[key] ? messages[key] : key;
+            }
           } else if (useInputValue && formattedValue !== value) {
             message = formattedValue;
           }

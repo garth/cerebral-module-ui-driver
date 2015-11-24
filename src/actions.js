@@ -95,14 +95,14 @@ export default {
             state.set(field.statePath, value);
           } else {
             isFormValid = false;
-            state.set(field.validationKeyStatePath, field.name + errorKey);
+            state.set(field.validationKeyStatePath, field.validateKeyPrefix + errorKey);
           }
           state.set(field.inputValueStatePath, inputValue);
         } else if (field.required) {
           const value = state.get(field.statePath);
           if (value === null || value === undefined || (typeof value === 'string' && value.length === 0)) {
             isFormValid = false;
-            state.set(field.validationKeyStatePath, field.name + 'Required');
+            state.set(field.validationKeyStatePath, field.validateKeyPrefix + 'Required');
           }
         }
       }
