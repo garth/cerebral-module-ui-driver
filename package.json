@@ -1,8 +1,8 @@
 {
   "name": "ui-driver",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A driver for connecting material-components to cerebral",
-  "main": "lib/index.js",
+  "main": "index.js",
   "scripts": {
     "lint": "eslint src test",
     "dev": "parallelshell 'babel src --watch --out-dir lib' 'watch --wait=1 \"eslint src test && mocha --compilers js:babel/register --recursive --reporter dot\" src test'",
