@@ -1,6 +1,9 @@
 import moment from 'moment';
+import sideEffects from './sideEffects';
 
 export default {
+
+  registerSideEffect: sideEffects.register,
 
   createForm(formStatePath) {
     const formPath = Array.isArray(formStatePath) ? formStatePath : [formStatePath];
