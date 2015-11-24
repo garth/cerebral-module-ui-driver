@@ -54,7 +54,7 @@ export default {
             validationKeyStatePath: [...formPath, 'validation', name],
             statePath,
             validationType,
-            validateKeyPrefix: translate ? name : '',
+            validationKeyPrefix: translate ? name : '',
             required
           }, signalData);
           validationFields.push(signalInput);

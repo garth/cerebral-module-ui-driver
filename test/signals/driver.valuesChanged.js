@@ -26,6 +26,7 @@ describe('signals', function () {
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
+          validationKeyPrefix: 'input',
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
@@ -48,6 +49,7 @@ describe('signals', function () {
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
+          validationKeyPrefix: 'input',
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
@@ -70,6 +72,7 @@ describe('signals', function () {
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
+          validationKeyPrefix: 'input',
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
@@ -88,6 +91,7 @@ describe('signals', function () {
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
+          validationKeyPrefix: 'input',
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
@@ -109,6 +113,7 @@ describe('signals', function () {
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
+          validationKeyPrefix: 'input',
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
@@ -129,6 +134,7 @@ describe('signals', function () {
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
+          validationKeyPrefix: 'input',
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
@@ -149,6 +155,7 @@ describe('signals', function () {
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
+          validationKeyPrefix: 'input',
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
@@ -168,6 +175,7 @@ describe('signals', function () {
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
+          validationKeyPrefix: 'input',
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
@@ -188,6 +196,7 @@ describe('signals', function () {
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
+          validationKeyPrefix: 'input',
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
@@ -208,6 +217,7 @@ describe('signals', function () {
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
+          validationKeyPrefix: 'input',
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
@@ -227,6 +237,7 @@ describe('signals', function () {
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
+          validationKeyPrefix: 'input',
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
@@ -249,6 +260,7 @@ describe('signals', function () {
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
+          validationKeyPrefix: 'input',
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
@@ -268,6 +280,7 @@ describe('signals', function () {
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
+          validationKeyPrefix: 'input',
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
@@ -287,6 +300,7 @@ describe('signals', function () {
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
+          validationKeyPrefix: 'input',
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
