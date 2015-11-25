@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { validate as checkEmail } from 'email-validator';
 import sideEffects from './sideEffects';
 
 function checkRequired(value, required) {
@@ -27,44 +28,100 @@ function checkMaxLength(string, maxLength) {
 }
 
 const validate = {
-  string(string, signalData) {
-    return checkRequired(string, signalData.required) || checkMaxLength(string, signalData.maxLength) || {
+  string(string, { required, maxLength } = {}) {
+    return checkRequired(string, required) || checkMaxLength(string, maxLength) || {
       isValid: true,
       value: string
     };
   },
 
-  time(timeString, signalData) {
+  time(timeString, { required } = {}) {
     const time = moment(timeString, 'H:mm');
-    return checkRequired(timeString, signalData.required) || (time.isValid() ? {
+    return checkRequired(timeString, required) || (time.isValid() ? {
       isValid: true,
       value: (time.get('hour') * 60) + time.get('minute')
     } : {
       isValid: false,
       errorKey: 'Invalid'
-    })
+    });
   },
 
-  date(dateString, signalData) {
+  date(dateString, { required } = {}) {
     const date = moment(dateString, 'L');
-    return checkRequired(dateString, signalData.required) || (date.isValid() ? {
+    return checkRequired(dateString, required) || (date.isValid() ? {
       isValid: true,
       value: date.toDate()
     } : {
       isValid: false,
       errorKey: 'Invalid'
-    })
+    });
   },
 
-  int(intString, signalData) {
+  int(intString, { required, multiplier } = {}) {
     const int = parseInt(intString, 10)
-    return checkRequired(intString, signalData.required) || (!isNaN(int) ? {
+    return checkRequired(intString, required) || (!isNaN(int) ? {
       isValid: true,
-      value: signalData.multiplier ? int * signalData.multiplier : int
+      value: multiplier ? int * multiplier : int
     } : {
       isValid: false,
       errorKey: 'Invalid'
-    })
+    });
+  },
+
+  email(email, { required } = {}) {
+    return checkRequired(email, required) || (checkEmail(email) ? {
+      isValid: true,
+      value: email
+    } : {
+      isValid: false,
+      errorKey: 'Invalid'
+    });
+  },
+
+  password(password, {
+    required,
+    minLength = 8,
+    maxLength = 128,
+    minPhraseLength = 20,
+    minPassingTests = 3,
+    tests = [
+      /[a-z]/,
+      /[A-Z]/,
+      /[0-9]/,
+      /[^A-Za-z0-9]/
+    ]
+  } = {}) {
+    let ok = false;
+    // password should be between min and max length and not have 3 or more repeating chars
+    if (password.length >= minLength && password.length <= maxLength && !/(.)\1{2,}/.test(password)) {
+      if (password.length >= minPhraseLength) {
+        // password is phrase
+        ok = true;
+      } else {
+        // password should pass some tests
+        ok = minPassingTests <= tests.reduce((total, re) => re.test(password) ? total + 1 : total, 0);
+      }
+    }
+    return checkRequired(password, required) || (ok ? {
+      isValid: true,
+      value: password
+    } : {
+      isValid: false,
+      errorKey: 'Invalid'
+    });
+  },
+
+  equal(string, {
+    required,
+    compare
+  } = {}) {
+    return checkRequired(string, required) || (string === compare ? {
+      isValid: true,
+      value: string
+    } : {
+      isValid: false,
+      errorKey: 'Invalid'
+    });
   }
 };
 

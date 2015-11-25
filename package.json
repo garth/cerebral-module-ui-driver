@@ -1,6 +1,6 @@
 {
   "name": "ui-driver",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A driver for connecting material-components to cerebral",
   "main": "lib/driver.js",
   "scripts": {
@@ -38,7 +38,9 @@
     "parallelshell": "^2.0.0",
     "watch": "^0.16.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "email-validator": "^1.0.3"
+  },
   "peerDependencies": {
     "moment": "^2.10.6"
   }

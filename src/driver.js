@@ -89,7 +89,6 @@ export default {
         const inputTimeProps = function (name, options = {}) {
           return inputProps(name, Object.assign({
             format: value => value === null ? '' : moment(value * 1000 * 60).utcOffset(0).format('H:mm'),
-            onChangeSignal: props.signals.driver.timeValueChanged,
             validationType: 'time'
           }, options));
         };
@@ -97,7 +96,6 @@ export default {
         const inputDateProps = function (name, options = {}) {
           return inputProps(name, Object.assign({
             format: value => value === null ? '' : moment(value).format('L'),
-            onChangeSignal: props.signals.driver.dateValueChanged,
             validationType: 'date'
           }, options));
         };
@@ -105,8 +103,26 @@ export default {
         const inputIntProps = function (name, options = {}) {
           return inputProps(name, Object.assign({
             format: value => value === null ? '' : '' + value,
-            onChangeSignal: props.signals.driver.intValueChanged,
             validationType: 'int'
+          }, options));
+        };
+
+        const inputEmailProps = function (name, options = {}) {
+          return inputProps(name, Object.assign({
+            validationType: 'email'
+          }, options));
+        };
+
+        const inputPasswordProps = function (name, options = {}) {
+          return inputProps(name, Object.assign({
+            validationType: 'password'
+          }, options));
+        };
+
+        const inputEqualsProps = function (name, compare, options = {}) {
+          return inputProps(name, Object.assign({
+            validationType: 'equal',
+            compare
           }, options));
         };
 
@@ -160,13 +176,16 @@ export default {
         };
 
         return {
-          menuOpenProps,
-          menuProps,
+          checkboxProps,
+          inputDateProps,
+          inputEmailProps,
+          inputEqualsProps,
+          inputIntProps,
+          inputPasswordProps,
           inputProps,
           inputTimeProps,
-          inputDateProps,
-          inputIntProps,
-          checkboxProps,
+          menuOpenProps,
+          menuProps,
           selectProps
         };
       }
