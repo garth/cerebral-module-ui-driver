@@ -36,6 +36,7 @@ export default {
         const inputProps = function (name, {
           label = null,
           value = props.driverMeta && props.driverMeta[name] && props.driverMeta[name].inputValue,
+          inputType = 'text',
           format = value => value === null ? '' : value,
           messages = {},
           validationType = 'string',
@@ -72,6 +73,7 @@ export default {
           return {
             label: label !== null ? label : t[name + 'Label'] ? t[name + 'Label']() : name,
             value: useInputValue ? value : formattedValue,
+            type: inputType,
             isError,
             message,
             onChange(e) {
@@ -115,7 +117,8 @@ export default {
 
         const inputPasswordProps = function (name, options = {}) {
           return inputProps(name, Object.assign({
-            validationType: 'password'
+            validationType: options.checkStrength ? 'password' : 'string',
+            inputType: 'password'
           }, options));
         };
 
