@@ -28,7 +28,7 @@ export default {
 
       getBindings(props, t=null) {
         validationFields = [];
-        const translate = t === null;
+        const translate = t !== null;
         if (!translate) {
           t = {};
         }
