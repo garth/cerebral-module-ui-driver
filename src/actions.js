@@ -115,13 +115,13 @@ const validate = {
     required,
     compare
   } = {}) {
-    return checkRequired(string, required) || (string === compare ? {
+    return string === compare ? {
       isValid: true,
       value: string
     } : {
       isValid: false,
       errorKey: 'Invalid'
-    });
+    };
   }
 };
 
