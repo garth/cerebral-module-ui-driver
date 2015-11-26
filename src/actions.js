@@ -111,10 +111,7 @@ const validate = {
     });
   },
 
-  equal(string, {
-    required,
-    compare
-  } = {}) {
+  equal(string, { compare } = {}) {
     return string === compare ? {
       isValid: true,
       value: string

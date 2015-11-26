@@ -125,7 +125,7 @@ export default {
         const inputEqualsProps = function (name, compare, options = {}) {
           return inputProps(name, Object.assign({
             validationType: 'equal',
-            compare
+            signalData: { compare }
           }, options));
         };
 

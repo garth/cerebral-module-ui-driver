@@ -1,6 +1,6 @@
 {
   "name": "ui-driver",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A driver for connecting material-components to cerebral",
   "main": "lib/driver.js",
   "scripts": {
