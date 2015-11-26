@@ -168,7 +168,7 @@ export default {
     return isFormValid ? output.success() : output.error();
   },
 
-  resetForm(statePath) {
+  resetFormDriver(statePath) {
     const formPath = Array.isArray(statePath) ? statePath : [statePath];
     const driverPath = ['drivers', ...formPath];
     const validationPath = [...formPath, 'validation'];
