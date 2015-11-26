@@ -4,7 +4,7 @@ The ui-driver is helper that simplifies the connecting of [material-components](
 
 ## Overview
 
-When the userinterface is pure and all app state is managed centrally, hooking up all data and events between the user interface components and controller can be a tedious task. Take the example of a pure select component that renders labels and error messages.
+When the user interface is pure and all app state is managed centrally, hooking up all data and events between the user interface components and controller can be a tedious task. Take the example of a pure select component that renders labels and error messages.
 
 ```js
 <Select
@@ -19,21 +19,21 @@ When the userinterface is pure and all app state is managed centrally, hooking u
   onClose={setClosedState}/>
 ```
 
-Whist not complicated, we need to hookup the selected value, list items and onChange events. But becuase this Select controll does a little more, we also need to hookup the label, error status and message. Finally, since this is a pure component, we also need to pass the isOpen state and handle the onOpen and onClose events which activate and deactivate the isOpen state.
+Whist not complicated, we need to hookup the selected value, list items and onChange events. But becuase this Select control does a little more we also need to hookup the label, error status and message. Finally, since this is a pure component, we also need to pass the isOpen state and handle the onOpen and onClose events which toggle the isOpen state.
 
 What you also don't see is the work that each event handler must do, which can ammount to 2 or 3 times as much code again. And for some controlls where we need to do validation, such as email inputs or password complixity checks, this can add up to much more.
 
-Immagine now that we have a form with 10 or even 20 of these compoents. Together with other components we have a lot of typing to do. What if instead of manually hooking up the properties and events we could just do the following:
+Imagine now that we have a form with 10 or even 20 of these components. Together with other components we have a lot of typing to do. What if instead of manually hooking up the properties and events we could just do the following:
 
 ```js
-<Select ...binding.selectProps('options')/>
+<Select ...bindings.selectProps('options', options)/>
 ```
 
-This is the ui-driver. All background event handling is also included, as well as field and form level validation.
+This is the ui-driver. All background event handling is built-in as well as field and form level validation.
 
 ## Example
 
-Lets take the example of a signin form.
+Let's take the example of a sign-in form.
 
 ```js
 // signin component
@@ -42,7 +42,7 @@ import React, { Component, PropTypes } from 'react';
 import { Decorator as State } from 'cerebral-react';
 import { Form, Button, Input, Row, Col } from 'material-components';
 import driver from 'ui-driver';
-import i18n from '../i18n';
+import i18n from 'i18n-lib';
 
 // create an instance of the form driver that is bound to the /signin object
 // in the state tree
@@ -54,22 +54,17 @@ const formDriver = driver.createForm('signin');
   locale: ['locale']
 }, formDriver.props()))
 export default class Signin extends Component {
-
-  static displayName = 'Signin';
-
-  static propTypes = {
-    locale: PropTypes.string,
-    signals: PropTypes.object
-  };
-
   render() {
     const {
       locale,
       signals
     } = this.props;
 
-    // This is the optional translation library, without this the field labels
-    // and error messages can be defined directly on each binding
+    // This is an optional translation library, without this the field labels
+    // and error messages can be defined directly on each binding.
+    // We use messageformat (https://github.com/SlexAxton/messageformat.js), but
+    // any object t that has a function properties that return a string should
+    // work (eg t.emailLabel() => 'Email')
     const t = i18n(locale, 'signin');
 
     // create the bindings by passing the current props and optional t to the
@@ -78,7 +73,7 @@ export default class Signin extends Component {
 
     // create the form, notice the formDriver.getValidationData() that is
     // passed to the onSubmit signal, this will gather all form data and pass
-    // it to the ui-driver actions
+    // it to the ui-driver actions for validaton purposes
     return (
       <Form
         style={{ marginTop: '30px' }}
@@ -98,9 +93,9 @@ The ui-driver also provides two actions that you can use in your signals to vali
 ```js
 // signin signal
 
-import controller from '../controller';
-import ajax from '../actions/ajax';
-import showSnackbar from '../actions/snackbar';
+import controller from './path/to/cerebral/controller';
+import ajax from './path/to/actions/ajax';
+import showSnackbar from './path/to/actions/showSnackbar';
 import stateToOutput from 'cerebral-addons/stateToOutput';
 import { validateForm, resetFormDriver } from 'ui-driver/actions';
 
@@ -111,7 +106,7 @@ controller.signal('signinRequested', [
       stateToOutput('signin', 'data'),
       [ajax.post('/api/signin'), {
         success: [
-          resetFormDriver('signin') // tidy up the temporary driver form data
+          resetFormDriver('signin') // tidy up the temp driver form data
                                     // from the central state tree
         ],
         error: [
@@ -124,7 +119,7 @@ controller.signal('signinRequested', [
 ]);
 ```
 
-## ui-driver Signals
+## Setup
 
 The ui-driver has some internal signals that must be registered with your cerebral controller.
 
@@ -137,7 +132,7 @@ signals.register(controller);
 
 ## Supported Bindings
 
-ui-driver currently supports the following bindings.
+ui-driver currently supports the following bindings:
 
 ### Checkbox
 
@@ -158,9 +153,9 @@ inputDateProps('fieldName', {
   label: 'date',   // optional unless t is not given
   required: true,  // optional
   dateFormat: 'L', // optional, momentjs date format defaults to 'L'
-  messages: {      // optional, taken from t when given
-    invalid: 'Invalid date',
-    required: 'Date is required'
+  messages: {      // optional, taken from t when given, defaults are shown
+    invalid: 'invalid',
+    required: 'required'
   }
 })
 ```
@@ -173,9 +168,9 @@ Field must be a string
 inputEmailProps('fieldName', {
   label: 'email',  // optional unless t is not given
   required: true,  // optional
-  messages: {      // optional, taken from t when given
-    invalid: 'Invalid email address',
-    required: 'Email address is required'
+  messages: {      // optional, taken from t when given, defaults are shown
+    invalid: 'invalid',
+    required: 'required'
   }
 })
 ```
@@ -188,8 +183,8 @@ Field must be a string, field must === comparisonValue to validate
 inputEqualsProps('fieldName', comparisonValue, {
   label: 'Confirm',      // optional unless t is not given
   inputType: 'password', // optional
-  messages: {            // optional, taken from t when given
-    invalid: 'Passwords do not match'
+  messages: {            // optional, taken from t when given, default is shown
+    invalid: 'invalid'
   }
 })
 ```
@@ -202,9 +197,9 @@ Field must be a string
 inputProps('fieldName', {
   label: 'name',  // optional unless t is not given
   required: true, // optional
-  messages: {     // optional, taken from t when given
-    invalid: 'Name should be 10 chars or less',
-    required: 'Name is required'
+  messages: {     // optional, taken from t when given, defaults are shown
+    invalid: 'invalid',
+    required: 'required'
   },
   signalData: {   // optional, validation params
     maxLength: 10
@@ -220,9 +215,9 @@ Field must be an int
 inputIntProps('fieldName', {
   label: 'age',   // optional unless t is not given
   required: true, // optional
-  messages: {     // optional, taken from t when given
-    invalid: 'Age should be a number',
-    required: 'Age is required'
+  messages: {     // optional, taken from t when given, defaults are shown
+    invalid: 'invalid',
+    required: 'required'
   }
 })
 ```
@@ -247,10 +242,10 @@ inputPasswordProps('fieldName', {
   label: 'password',   // optional unless t is not given
   required: true,      // optional
   checkStrength: true, // optional
-  messages: {          // optional, taken from t when given
-    invalid: 'Password is invalid',
-    required: 'Password is required'
-  },
+  messages: {          // optional, taken from t when given, defaults are shown
+    invalid: 'invalid',
+    required: 'required'
+  }
   signalData: {        // optional, password strength
     minLength = 8,     // config - defaults are shown
     maxLength = 128,
@@ -268,7 +263,7 @@ inputPasswordProps('fieldName', {
 
 ### Select
 
-Field can be of any type but values in the options collection must === the field value
+Field can be of any type but the selected value in the options collection must === the field value
 
 ```js
 options = [
@@ -289,9 +284,9 @@ inputTimeProps('fieldName', {
   label: 'time',      // optional unless t is not given
   required: true,     // optional
   timeFormat: 'H:mm', // optional, momentjs time format defaults to 'H:mm'
-  messages: {         // optional, taken from t when given
-    invalid: 'Invalid time',
-    required: 'Time is required'
+  messages: {         // optional, taken from t when given, defaults are shown
+    invalid: 'invalid',
+    required: 'required'
   }
 })
 ```
@@ -306,7 +301,8 @@ import driver from 'ui-driver';
 
 driver.registerSideEffect('formName', 'fieldName', function sideEffectFunction(field, value, state) {
   // field: contains all kinds of data about the field that has been changed
-  // value: is the current value of the change field
+  // value: is the new value of the changing field (the value in the state is updated
+  //        after the sideEffect has executed
   // state: is the cerebral state object provided to the syncronouse validateForm action,
   //        use this to apply any side effects to the central state
 });
