@@ -35,8 +35,8 @@ const validate = {
     };
   },
 
-  time(timeString, { required } = {}) {
-    const time = moment(timeString, 'H:mm');
+  time(timeString, { required, timeFormat } = {}) {
+    const time = moment(timeString, timeFormat);
     return checkRequired(timeString, required) || (time.isValid() ? {
       isValid: true,
       value: (time.get('hour') * 60) + time.get('minute')
@@ -46,8 +46,8 @@ const validate = {
     });
   },
 
-  date(dateString, { required } = {}) {
-    const date = moment(dateString, 'L');
+  date(dateString, { required, dateFormat } = {}) {
+    const date = moment(dateString, dateFormat);
     return checkRequired(dateString, required) || (date.isValid() ? {
       isValid: true,
       value: date.toDate()

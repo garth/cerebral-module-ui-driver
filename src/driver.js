@@ -89,16 +89,20 @@ export default {
         };
 
         const inputTimeProps = function (name, options = {}) {
+          const timeFormat = options.timeFormat ? options.timeFormat : 'H:mm';
           return inputProps(name, Object.assign({
-            format: value => value === null ? '' : moment(value * 1000 * 60).utcOffset(0).format('H:mm'),
-            validationType: 'time'
+            format: value => value === null ? '' : moment(value * 1000 * 60).utcOffset(0).format(timeFormat),
+            validationType: 'time',
+            signalData: { timeFormat }
           }, options));
         };
 
         const inputDateProps = function (name, options = {}) {
+          const dateFormat = options.dateFormat ? options.dateFormat : 'L';
           return inputProps(name, Object.assign({
-            format: value => value === null ? '' : moment(value).format('L'),
-            validationType: 'date'
+            format: value => value === null ? '' : moment(value).format(dateFormat),
+            validationType: 'date',
+            signalData: { dateFormat }
           }, options));
         };
 
