@@ -221,6 +221,7 @@ describe('signals', function () {
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
+          timeFormat: 'H:mm',
           validationType: 'time',
           required: false,
           inputValue: '8:30'
@@ -241,6 +242,7 @@ describe('signals', function () {
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
+          timeFormat: 'H:mm',
           validationType: 'time',
           required: false,
           inputValue: 'test'
@@ -264,6 +266,7 @@ describe('signals', function () {
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
+          timeFormat: 'H:mm',
           validationType: 'time',
           required: false,
           inputValue: ''
@@ -284,6 +287,7 @@ describe('signals', function () {
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
+          dateFormat: 'L',
           validationType: 'date',
           required: false,
           inputValue: '12/12/2012'
@@ -304,6 +308,7 @@ describe('signals', function () {
           inputValueStatePath: ['inputValue'],
           validationKeyStatePath: ['validationKey'],
           statePath: ['value'],
+          dateFormat: 'L',
           validationType: 'date',
           required: false,
           inputValue: 'test'
