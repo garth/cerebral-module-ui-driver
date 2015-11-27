@@ -14,7 +14,6 @@ export default {
 
       props() {
         return {
-          locale: ['locale'],
           driverForm: formPath,
           driverMeta: ['drivers', ...formPath]
         };
