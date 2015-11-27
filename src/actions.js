@@ -37,7 +37,7 @@ const validate = {
 
   time(timeString, { required, timeFormat } = {}) {
     const time = moment(timeString, timeFormat);
-    return checkRequired(timeString, required) || (time.isValid() ? {
+    return checkRequired(timeString, required) || (typeof timeString === 'string' && time.isValid() ? {
       isValid: true,
       value: (time.get('hour') * 60) + time.get('minute')
     } : {
@@ -48,7 +48,7 @@ const validate = {
 
   date(dateString, { required, dateFormat } = {}) {
     const date = moment(dateString, dateFormat);
-    return checkRequired(dateString, required) || (date.isValid() ? {
+    return checkRequired(dateString, required) || (typeof dateString === 'string' && date.isValid() ? {
       isValid: true,
       value: date.toDate()
     } : {
@@ -58,7 +58,7 @@ const validate = {
   },
 
   int(intString, { required, multiplier } = {}) {
-    const int = parseInt(intString, 10)
+    const int = parseInt(intString, 10);
     return checkRequired(intString, required) || (!isNaN(int) ? {
       isValid: true,
       value: multiplier ? int * multiplier : int
@@ -69,7 +69,7 @@ const validate = {
   },
 
   email(email, { required } = {}) {
-    return checkRequired(email, required) || (checkEmail(email) ? {
+    return checkRequired(email, required) || (typeof email === 'string' && checkEmail(email) ? {
       isValid: true,
       value: email
     } : {
@@ -92,14 +92,16 @@ const validate = {
     ]
   } = {}) {
     let ok = false;
-    // password should be between min and max length and not have 3 or more repeating chars
-    if (password.length >= minLength && password.length <= maxLength && !/(.)\1{2,}/.test(password)) {
-      if (password.length >= minPhraseLength) {
-        // password is phrase
-        ok = true;
-      } else {
-        // password should pass some tests
-        ok = minPassingTests <= tests.reduce((total, re) => re.test(password) ? total + 1 : total, 0);
+    if (typeof password === 'string') {
+      // password should be between min and max length and not have 3 or more repeating chars
+      if (password.length >= minLength && password.length <= maxLength && !/(.)\1{2,}/.test(password)) {
+        if (password.length >= minPhraseLength) {
+          // password is phrase
+          ok = true;
+        } else {
+          // password should pass some tests
+          ok = minPassingTests <= tests.reduce((total, re) => re.test(password) ? total + 1 : total, 0);
+        }
       }
     }
     return checkRequired(password, required) || (ok ? {
