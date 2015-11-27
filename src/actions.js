@@ -142,7 +142,9 @@ export default {
       } else {
         const inputValue = typeof field.inputValue === 'string'
           ? field.inputValue
-          : state.get(field.inputValueStatePath);
+          : state.get(field.inputValueStatePath) === undefined
+            ? field.displayValue
+            : state.get(field.inputValueStatePath);
         if (field.validationType) {
           const { isValid, value, errorKey } = validate[field.validationType](inputValue, field);
           if (isValid) {

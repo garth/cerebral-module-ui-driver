@@ -46,10 +46,12 @@ export default {
           const validationKey = props.driverForm && props.driverForm.validation && props.driverForm.validation[name];
           const isError = !!validationKey;
           const formattedValue = props.driverForm && format(props.driverForm[name]);
+          const displayValue = useInputValue ? value : formattedValue;
           const statePath = [...formPath, name];
           const signalInput = Object.assign({
             formName,
             name,
+            displayValue,
             inputValueStatePath: ['drivers', ...statePath, 'inputValue'],
             validationKeyStatePath: [...formPath, 'validation', name],
             statePath,
@@ -71,7 +73,7 @@ export default {
           }
           return {
             label: label !== null ? label : t[name + 'Label'] ? t[name + 'Label']() : name,
-            value: useInputValue ? value : formattedValue,
+            value: displayValue,
             type: inputType,
             isError,
             message,
