@@ -141,7 +141,7 @@ export default {
         const inputValue = typeof field.inputValue === 'string'
           ? field.inputValue
           : state.get(field.inputValueStatePath);
-        if (inputValue !== undefined && field.validationType) {
+        if (field.validationType) {
           const { isValid, value, errorKey } = validate[field.validationType](inputValue, field);
           if (isValid) {
             sideEffects.exec(field, value, state);

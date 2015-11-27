@@ -23,7 +23,7 @@ Whist not complicated, we need to hookup the selected value, list items and onCh
 
 What you also don't see is the work that each event handler must do, which can ammount to 2 or 3 times as much code again. And for some controlls where we need to do validation, such as email inputs or password complixity checks, this can add up to much more.
 
-Imagine now that we have a form with 10 or even 20 of these components. Together with other components we have a lot of typing to do. What if instead of manually hooking up the properties and events we could just do the following:
+Imagine now that we have a form with 10 or even 20 of these components. Together with other markup and event handling we have a lot of repetative typing to do. What if instead of manually hooking up the properties and events we could just do the following:
 
 ```js
 <Select ...bindings.selectProps('options', options)/>
@@ -63,7 +63,7 @@ export default class Signin extends Component {
     // This is an optional translation library, without this the field labels
     // and error messages can be defined directly on each binding.
     // We use messageformat (https://github.com/SlexAxton/messageformat.js), but
-    // any object t that has a function properties that return a string should
+    // any object t that has function properties that return a string should
     // work (eg t.emailLabel() => 'Email')
     const t = i18n(locale, 'signin');
 
