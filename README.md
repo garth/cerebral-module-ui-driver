@@ -165,7 +165,7 @@ const bindings = formDriver.getBindings({
   state,   // cerebral state defined by 'formDriver.state()'
   signals, // cerebral signals
   t,       // optional - translation function
-  custom   // optional - custom props to pass to all bindings
+  props   // optional - custom props to pass to all bindings
 });
 ```
 

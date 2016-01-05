@@ -25,7 +25,7 @@ export default {
         };
       },
 
-      getBindings({ state, signals, t = null, custom = {} }) {
+      getBindings({ state, signals, t = null, props = {} }) {
         validationFields = [];
 
         const inputProps = function (name, {
@@ -86,7 +86,7 @@ export default {
                 ]
               });
             }
-          }, custom);
+          }, props);
         };
 
         const inputTimeProps = function (name, options = {}) {
@@ -145,7 +145,7 @@ export default {
             statePath: isOpenPath,
             value: true
           });
-          return Object.assign(p, custom);
+          return Object.assign(p, props);
         };
 
         const menuProps = function (name) {
@@ -160,7 +160,7 @@ export default {
                 value: false
               });
             }
-          }, custom);
+          }, props);
         };
 
         const selectProps = function (name, selectOptions, options = {}) {
