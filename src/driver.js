@@ -25,8 +25,9 @@ export default {
         };
       },
 
-      getBindings({ state, signals, t = null }) {
+      getBindings({ state, signals, t = null, custom = {} }) {
         validationFields = [];
+
         const inputProps = function (name, {
           label = null,
           value = state.driverMeta && state.driverMeta[name] && state.driverMeta[name].inputValue,
@@ -66,7 +67,7 @@ export default {
           } else if (useInputValue && formattedValue !== value) {
             message = formattedValue;
           }
-          return {
+          return Object.Assign({
             label: label !== null
               ? label
               : (t || {})[name + 'Label']
@@ -85,7 +86,7 @@ export default {
                 ]
               });
             }
-          };
+          }, custom);
         };
 
         const inputTimeProps = function (name, options = {}) {
@@ -144,14 +145,14 @@ export default {
             statePath: isOpenPath,
             value: true
           });
-          return p;
+          return Object.assign(p, custom);
         };
 
         const menuProps = function (name) {
           const statePath = [...formPath, name];
           const driverPath = ['drivers', ...statePath];
           const isOpenPath = [...driverPath, 'isOpen'];
-          return {
+          return Object.assign({
             isOpen: !!(state.driverMeta && state.driverMeta[name] && state.driverMeta[name].isOpen),
             onClose() {
               signals.driver.isOpenChanged({
@@ -159,7 +160,7 @@ export default {
                 value: false
               });
             }
-          };
+          }, custom);
         };
 
         const selectProps = function (name, selectOptions, options = {}) {
