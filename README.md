@@ -1,6 +1,6 @@
 # ui-driver
 
-The ui-driver is helper that simplifies the connecting of [material-components](http://garth.github.io/material-components) (react form components) to [cerebral](http://www.cerebraljs.com/). It automates signals, validation, i18n and more to simplify and reduce repetative code in React form components.
+The ui-driver is helper that simplifies the connecting of [material-components](http://garth.github.io/material-components) (React form components) or [snabbdom-material](http://garth.github.io/snabbdom-material) (snabbdom form components) to [cerebral](http://www.cerebraljs.com/). It automates signals, validation, i18n and more to simplify and reduce repetative code in React and snabbdom form components.
 
 ## Overview
 
@@ -46,13 +46,13 @@ import i18n from 'i18n-lib';
 
 // create an instance of the form driver that is bound to the /signin object
 // in the state tree
-const formDriver = driver.createForm('signin');
+const formDriver = driver.createForm(['signin']);
 
 // the form driver will generate the neccessary cerebral properties that it
 // needs
 @State(Object.assign({
   locale: ['locale']
-}, formDriver.props()))
+}, formDriver.state()))
 export default class Signin extends Component {
   render() {
     const {
@@ -67,9 +67,9 @@ export default class Signin extends Component {
     // work (eg t.emailLabel() => 'Email')
     const t = i18n(locale, 'signin');
 
-    // create the bindings by passing the current props and optional t to the
-    // form driver
-    const bindings = formDriver.getBindings(this.props, t);
+    // create the bindings by passing the current state, signals and optional t
+    // to the form driver
+    const bindings = formDriver.getBindings({ state: this.props, signals, t });
 
     // create the form, notice the formDriver.getValidationData() that is
     // passed to the onSubmit signal, this will gather all form data and pass

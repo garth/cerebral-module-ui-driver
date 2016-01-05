@@ -6,7 +6,7 @@ export default function register(controller) {
     setStateValue
   ]);
 
-  controller.signal('driver.valuesChanged', [
+  controller.signalSync('driver.valuesChanged', [
     validateForm, {
       success: [],
       error: []

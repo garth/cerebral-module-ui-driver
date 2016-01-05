@@ -12,7 +12,7 @@ export default {
 
     return {
 
-      props() {
+      state() {
         return {
           driverForm: formPath,
           driverMeta: ['drivers', ...formPath]
@@ -25,11 +25,11 @@ export default {
         };
       },
 
-      getBindings(props, t = null) {
+      getBindings({ state, signals, t = null }) {
         validationFields = [];
         const inputProps = function (name, {
           label = null,
-          value = props.driverMeta && props.driverMeta[name] && props.driverMeta[name].inputValue,
+          value = state.driverMeta && state.driverMeta[name] && state.driverMeta[name].inputValue,
           inputType = 'text',
           format = val => val === null ? '' : val,
           messages = {},
@@ -38,9 +38,9 @@ export default {
           signalData = {}
         } = {}) {
           const useInputValue = typeof value !== 'undefined' && value !== null;
-          const validationKey = props.driverForm && props.driverForm.validation && props.driverForm.validation[name];
+          const validationKey = state.driverForm && state.driverForm.validation && state.driverForm.validation[name];
           const isError = !!validationKey;
-          const formattedValue = props.driverForm && format(props.driverForm[name]);
+          const formattedValue = state.driverForm && format(state.driverForm[name]);
           const displayValue = useInputValue ? value : formattedValue;
           const statePath = [...formPath, name];
           const signalInput = Object.assign({
@@ -77,7 +77,7 @@ export default {
             isError,
             message,
             onChange(e) {
-              props.signals.driver.valuesChanged.sync({
+              signals.driver.valuesChanged({
                 fields: [
                   Object.assign({
                     inputValue: e.target.value
@@ -140,7 +140,7 @@ export default {
           const driverPath = ['drivers', ...statePath];
           const isOpenPath = [...driverPath, 'isOpen'];
           const p = {};
-          p[eventType] = () => props.signals.driver.isOpenChanged({
+          p[eventType] = () => signals.driver.isOpenChanged({
             statePath: isOpenPath,
             value: true
           });
@@ -152,9 +152,9 @@ export default {
           const driverPath = ['drivers', ...statePath];
           const isOpenPath = [...driverPath, 'isOpen'];
           return {
-            isOpen: !!(props.driverMeta && props.driverMeta[name] && props.driverMeta[name].isOpen),
+            isOpen: !!(state.driverMeta && state.driverMeta[name] && state.driverMeta[name].isOpen),
             onClose() {
-              props.signals.driver.isOpenChanged({
+              signals.driver.isOpenChanged({
                 statePath: isOpenPath,
                 value: false
               });
