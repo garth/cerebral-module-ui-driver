@@ -67,7 +67,7 @@ export default {
           } else if (useInputValue && formattedValue !== value) {
             message = formattedValue;
           }
-          return Object.Assign({
+          return Object.assign({
             label: label !== null
               ? label
               : (t || {})[name + 'Label']
