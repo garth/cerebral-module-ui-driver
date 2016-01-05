@@ -4,17 +4,13 @@ import sideEffects from './sideEffects';
 
 function checkRequired(value, required) {
   if (value === null || value === undefined || value.length === 0) {
-    if (required) {
-      return {
-        isValid: false,
-        errorKey: 'Required'
-      };
-    } else {
-      return {
-        isValid: true,
-        value: null
-      };
-    }
+    return required ? {
+      isValid: false,
+      errorKey: 'Required'
+    } : {
+      isValid: true,
+      value: null
+    };
   }
 }
 
@@ -124,59 +120,55 @@ const validate = {
   }
 };
 
-export default {
+export function setStateValue({ input, state }) {
+  state.set(input.statePath, input.value);
+}
 
-  setStateValue(input, state) {
-    state.set(input.statePath, input.value);
-  },
+export function validateForm({ input, state, output }) {
+  let isFormValid = true;
 
-  validateForm(input, state, output) {
-    let isFormValid = true;
-
-    input.fields.forEach(field => {
-      if (field.validationType === 'none') {
-        if (typeof field.inputValue !== 'undefined') {
-          sideEffects.exec(field, field.inputValue, state);
-          state.set(field.statePath, field.inputValue);
+  input.fields.forEach(field => {
+    if (field.validationType === 'none') {
+      if (typeof field.inputValue !== 'undefined') {
+        sideEffects.exec(field, field.inputValue, state);
+        state.set(field.statePath, field.inputValue);
+      }
+    } else {
+      const inputValue = typeof field.inputValue === 'string'
+        ? field.inputValue
+        : state.get(field.inputValueStatePath) === undefined
+          ? field.displayValue
+          : state.get(field.inputValueStatePath);
+      if (field.validationType) {
+        const { isValid, value, errorKey } = validate[field.validationType](inputValue, field);
+        if (isValid) {
+          sideEffects.exec(field, value, state);
+          state.unset(field.validationKeyStatePath);
+          state.set(field.statePath, value);
+        } else {
+          isFormValid = false;
+          state.set(field.validationKeyStatePath, field.validationKeyPrefix + errorKey);
         }
-      } else {
-        const inputValue = typeof field.inputValue === 'string'
-          ? field.inputValue
-          : state.get(field.inputValueStatePath) === undefined
-            ? field.displayValue
-            : state.get(field.inputValueStatePath);
-        if (field.validationType) {
-          const { isValid, value, errorKey } = validate[field.validationType](inputValue, field);
-          if (isValid) {
-            sideEffects.exec(field, value, state);
-            state.unset(field.validationKeyStatePath);
-            state.set(field.statePath, value);
-          } else {
-            isFormValid = false;
-            state.set(field.validationKeyStatePath, field.validationKeyPrefix + errorKey);
-          }
-          state.set(field.inputValueStatePath, inputValue);
-        } else if (field.required) {
-          const value = state.get(field.statePath);
-          if (value === null || value === undefined || (typeof value === 'string' && value.length === 0)) {
-            isFormValid = false;
-            state.set(field.validationKeyStatePath, field.validationKeyPrefix + 'Required');
-          }
+        state.set(field.inputValueStatePath, inputValue);
+      } else if (field.required) {
+        const value = state.get(field.statePath);
+        if (value === null || value === undefined || (typeof value === 'string' && value.length === 0)) {
+          isFormValid = false;
+          state.set(field.validationKeyStatePath, field.validationKeyPrefix + 'Required');
         }
       }
-    });
+    }
+  });
 
-    return isFormValid ? output.success() : output.error();
-  },
+  return isFormValid ? output.success() : output.error();
+}
 
-  resetFormDriver(statePath) {
-    const formPath = Array.isArray(statePath) ? statePath : [statePath];
-    const driverPath = ['drivers', ...formPath];
-    const validationPath = [...formPath, 'validation'];
-    return function resetForm(input, state) {
-      state.set(driverPath, {});
-      state.unset(validationPath);
-    };
-  }
-
+export function resetFormDriver(statePath) {
+  const formPath = Array.isArray(statePath) ? statePath : [statePath];
+  const driverPath = ['drivers', ...formPath];
+  const validationPath = [...formPath, 'validation'];
+  return function resetForm({ state }) {
+    state.set(driverPath, {});
+    state.unset(validationPath);
+  };
 }

@@ -125,9 +125,9 @@ The ui-driver has some internal signals that must be registered with your cerebr
 
 ```js
 import controller from './path/to/cerebral/controller';
-import signals from 'ui-driver/signals';
+import registerSignals from 'ui-driver/registerSignals';
 
-signals.register(controller);
+registerSignals(controller);
 ```
 
 ## Supported Bindings

@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import sendSignal from '../helpers/sendSignal';
 import controller from '../helpers/controller';
-import signals from '../../src/signals';
-signals.register(controller);
+import registerSignals from '../../src/registerSignals';
+registerSignals(controller);
 
 describe('signals', function () {
 
@@ -12,14 +12,16 @@ describe('signals', function () {
 
   describe('driver.valuesChanged', function () {
 
+    let tree;
+
     beforeEach(function () {
-      this.tree = controller.model.tree;
-      this.tree.set({
+      tree = controller.model.tree;
+      tree.set({
         inputValue: null,
         validationKey: null,
         value: null
       });
-      this.tree.commit();
+      tree.commit();
     });
 
     it('should copy a value from input to state', function () {
@@ -35,7 +37,7 @@ describe('signals', function () {
           inputValue: 'test'
         }]
       }, () => {
-        expect(this.tree.get()).to.eql({
+        expect(tree.get()).to.eql({
           inputValue: 'test',
           value: 'test'
         });
@@ -43,9 +45,9 @@ describe('signals', function () {
     });
 
     it('should copy an invalid value from input to state', function () {
-      this.tree.set('inputValue', 'test');
-      this.tree.set('value', 'test');
-      this.tree.commit();
+      tree.set('inputValue', 'test');
+      tree.set('value', 'test');
+      tree.commit();
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
@@ -58,7 +60,7 @@ describe('signals', function () {
           inputValue: ''
         }]
       }, () => {
-        expect(this.tree.get()).to.eql({
+        expect(tree.get()).to.eql({
           inputValue: '',
           validationKey: 'inputRequired',
           value: 'test'
@@ -67,8 +69,8 @@ describe('signals', function () {
     });
 
     it('should pick input values from the state tree', function () {
-      this.tree.set('inputValue', 'test');
-      this.tree.commit();
+      tree.set('inputValue', 'test');
+      tree.commit();
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
@@ -80,7 +82,7 @@ describe('signals', function () {
           required: false
         }]
       }, () => {
-        expect(this.tree.get()).to.eql({
+        expect(tree.get()).to.eql({
           inputValue: 'test',
           value: 'test'
         });
@@ -101,7 +103,7 @@ describe('signals', function () {
           maxLength: 3
         }]
       }, () => {
-        expect(this.tree.get()).to.eql({
+        expect(tree.get()).to.eql({
           inputValue: 'abcd',
           validationKey: 'inputInvalid',
           value: null
@@ -122,7 +124,7 @@ describe('signals', function () {
           inputValue: ''
         }]
       }, () => {
-        expect(this.tree.get()).to.eql({
+        expect(tree.get()).to.eql({
           inputValue: '',
           validationKey: 'inputRequired',
           value: null
@@ -143,7 +145,7 @@ describe('signals', function () {
           inputValue: null
         }]
       }, () => {
-        expect(this.tree.get()).to.eql({
+        expect(tree.get()).to.eql({
           inputValue: null,
           validationKey: 'inputRequired',
           value: null
@@ -164,7 +166,7 @@ describe('signals', function () {
           inputValue: '123'
         }]
       }, () => {
-        expect(this.tree.get()).to.eql({
+        expect(tree.get()).to.eql({
           inputValue: '123',
           value: 123
         });
@@ -185,7 +187,7 @@ describe('signals', function () {
           inputValue: '123'
         }]
       }, () => {
-        expect(this.tree.get()).to.eql({
+        expect(tree.get()).to.eql({
           inputValue: '123',
           value: 246
         });
@@ -205,7 +207,7 @@ describe('signals', function () {
           inputValue: 'test'
         }]
       }, () => {
-        expect(this.tree.get()).to.eql({
+        expect(tree.get()).to.eql({
           inputValue: 'test',
           validationKey: 'inputInvalid',
           value: null
@@ -227,7 +229,7 @@ describe('signals', function () {
           inputValue: '8:30'
         }]
       }, () => {
-        expect(this.tree.get()).to.eql({
+        expect(tree.get()).to.eql({
           inputValue: '8:30',
           value: 510
         });
@@ -248,7 +250,7 @@ describe('signals', function () {
           inputValue: 'test'
         }]
       }, () => {
-        expect(this.tree.get()).to.eql({
+        expect(tree.get()).to.eql({
           inputValue: 'test',
           validationKey: 'inputInvalid',
           value: null
@@ -257,8 +259,8 @@ describe('signals', function () {
     });
 
     it('should convert empty times to null', function () {
-      this.tree.set('value', 100);
-      this.tree.commit();
+      tree.set('value', 100);
+      tree.commit();
       return sendSignal(controller, controller.signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
@@ -272,7 +274,7 @@ describe('signals', function () {
           inputValue: ''
         }]
       }, () => {
-        expect(this.tree.get()).to.eql({
+        expect(tree.get()).to.eql({
           inputValue: '',
           value: null
         });
@@ -293,7 +295,7 @@ describe('signals', function () {
           inputValue: '12/12/2012'
         }]
       }, () => {
-        expect(this.tree.get()).to.eql({
+        expect(tree.get()).to.eql({
           inputValue: '12/12/2012',
           value: new Date(2012, 11, 12)
         });
@@ -314,7 +316,7 @@ describe('signals', function () {
           inputValue: 'test'
         }]
       }, () => {
-        expect(this.tree.get()).to.eql({
+        expect(tree.get()).to.eql({
           inputValue: 'test',
           validationKey: 'inputInvalid',
           value: null

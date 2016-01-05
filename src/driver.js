@@ -25,18 +25,13 @@ export default {
         };
       },
 
-      getBindings(props, t=null) {
+      getBindings(props, t = null) {
         validationFields = [];
-        const translate = t !== null;
-        if (!translate) {
-          t = {};
-        }
-
         const inputProps = function (name, {
           label = null,
           value = props.driverMeta && props.driverMeta[name] && props.driverMeta[name].inputValue,
           inputType = 'text',
-          format = value => value === null ? '' : value,
+          format = val => val === null ? '' : val,
           messages = {},
           validationType = 'string',
           required = false,
@@ -56,23 +51,27 @@ export default {
             validationKeyStatePath: [...formPath, 'validation', name],
             statePath,
             validationType,
-            validationKeyPrefix: translate ? name : '',
+            validationKeyPrefix: t ? name : '',
             required
           }, signalData);
           validationFields.push(signalInput);
           let message = '';
           if (isError) {
-            if (translate) {
+            if (t) {
               message = t[validationKey] ? t[validationKey]() : validationKey;
             } else {
-              let key = validationKey.toLowerCase();
+              const key = validationKey.toLowerCase();
               message = messages[key] ? messages[key] : key;
             }
           } else if (useInputValue && formattedValue !== value) {
             message = formattedValue;
           }
           return {
-            label: label !== null ? label : t[name + 'Label'] ? t[name + 'Label']() : name,
+            label: label !== null
+              ? label
+              : (t || {})[name + 'Label']
+                ? (t || {})[name + 'Label']()
+                : name,
             value: displayValue,
             type: inputType,
             isError,
@@ -140,13 +139,11 @@ export default {
           const statePath = [...formPath, name];
           const driverPath = ['drivers', ...statePath];
           const isOpenPath = [...driverPath, 'isOpen'];
-          let p = {};
-          p[eventType] = function() {
-            props.signals.driver.isOpenChanged({
-              statePath: isOpenPath,
-              value: true
-            });
-          };
+          const p = {};
+          p[eventType] = () => props.signals.driver.isOpenChanged({
+            statePath: isOpenPath,
+            value: true
+          });
           return p;
         };
 
@@ -197,7 +194,7 @@ export default {
           selectProps
         };
       }
-    }
+    };
   }
 
-}
+};

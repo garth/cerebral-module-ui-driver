@@ -1,4 +1,4 @@
-let sideEffects = {};
+const sideEffects = {};
 
 export default {
 
@@ -20,4 +20,4 @@ export default {
     }
   }
 
-}
+};

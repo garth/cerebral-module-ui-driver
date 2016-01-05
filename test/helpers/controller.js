@@ -5,8 +5,8 @@ const state = {
   locale: 'en'
 };
 
-let model = Model(state);
-let controller = Controller(model, {});
+const model = Model(state);
+const controller = Controller(model, {});
 controller.model = model;
 controller.reset = () => {
   model.tree.set(state);

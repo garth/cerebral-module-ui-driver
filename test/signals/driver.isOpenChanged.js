@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import sendSignal from '../helpers/sendSignal';
 import controller from '../helpers/controller';
-import signals from '../../src/signals';
-signals.register(controller);
+import registerSignals from '../../src/registerSignals';
+registerSignals(controller);
 
 describe('signals', function () {
 
@@ -12,10 +12,12 @@ describe('signals', function () {
 
   describe('driver.isOpenChanged', function () {
 
+    let tree;
+
     beforeEach(function () {
-      this.tree = controller.model.tree;
-      this.tree.set({ testPath: null });
-      this.tree.commit();
+      tree = controller.model.tree;
+      tree.set({ testPath: null });
+      tree.commit();
     });
 
     it('should set a given value on a give statePath', function () {
@@ -23,7 +25,7 @@ describe('signals', function () {
         statePath: 'testPath',
         value: 'x'
       }, () => {
-        expect(this.tree.get('testPath')).to.equal('x');
+        expect(tree.get('testPath')).to.equal('x');
       });
     });
 
