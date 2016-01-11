@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { validate as checkEmail } from 'email-validator'
-import sideEffects from './sideEffects'
+import sideEffects from '../sideEffects'
 
 function checkRequired (value, required) {
   if (value === null || value === undefined || value.length === 0) {
@@ -120,7 +120,7 @@ const validate = {
   }
 }
 
-export function validateForm ({ input, state, output }) {
+export default function validateForm ({ input, state, output }) {
   let isFormValid = true
 
   input.fields.forEach(field => {
@@ -157,14 +157,4 @@ export function validateForm ({ input, state, output }) {
   })
 
   return isFormValid ? output.success() : output.error()
-}
-
-export function resetFormDriver (statePath) {
-  const formPath = Array.isArray(statePath) ? statePath : [statePath]
-  const driverPath = ['drivers', ...formPath]
-  const validationPath = [...formPath, 'validation']
-  return function resetForm ({ state }) {
-    state.set(driverPath, {})
-    state.unset(validationPath)
-  }
 }

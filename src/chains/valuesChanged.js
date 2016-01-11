@@ -1,7 +1,7 @@
-import { validateForm } from '../actions.js'
+import validate from '../actions/validate'
 
 export default [
-  validateForm, {
+  validate, {
     success: [],
     error: []
   }

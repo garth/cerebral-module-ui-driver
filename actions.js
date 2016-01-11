@@ -1,4 +1,4 @@
 module.exports = {
-  validateForm: require('./lib/actions').validateForm,
-  resetFormDriver: require('./lib/actions').resetFormDriver
+  validateForm: require('./lib/actions/validate').default,
+  resetFormDriver: require('./lib/actions/reset').default
 }
