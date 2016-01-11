@@ -109,7 +109,8 @@ export default {
         const inputIntProps = function (name, options = {}) {
           return inputProps(name, Object.assign({
             format: value => value === null ? '' : '' + value,
-            validationType: 'int'
+            validationType: 'int',
+            inputType: 'number'
           }, options))
         }
 
