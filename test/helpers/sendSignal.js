@@ -1,17 +1,15 @@
-export default function sendSignal(controller, signal, data, test) {
-
+export default function sendSignal (controller, signal, data, test) {
   return new Promise(function (resolve, reject) {
     controller.once('signalEnd', function () {
       if (typeof test === 'function') {
         try {
-          test();
+          test()
         } catch (e) {
-          return reject(e);
+          return reject(e)
         }
       }
-      resolve();
-    });
-    signal(data);
-  });
-
+      resolve()
+    })
+    signal(data)
+  })
 }

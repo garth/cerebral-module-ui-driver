@@ -1,52 +1,56 @@
 {
-  "name": "ui-driver",
+  "name": "cerebral-module-ui-driver",
   "version": "0.4.4",
-  "description": "A driver for connecting material-components to cerebral",
+  "description": "A driver for connecting ui components to cerebral",
   "main": "lib/driver.js",
   "scripts": {
-    "lint": "eslint .",
-    "dev": "parallelshell 'babel src --watch --out-dir lib' 'watch --wait=1 \"eslint . && mocha --compilers js:babel-core/register --recursive --reporter dot\" src test'",
-    "prebuild": "eslint .",
+    "lint": "standard src/**/*.js test/**/*.js",
+    "start": "parallelshell 'babel src --watch --out-dir lib' 'watch --wait=1 \"npm run lint && mocha --compilers js:babel-core/register --recursive --reporter dot\" src test'",
+    "prebuild": "npm run lint",
     "build": "babel src --out-dir lib",
-    "pretest": "eslint .",
+    "pretest": "npm run lint",
     "test": "mocha --compilers js:babel-core/register --recursive",
     "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/garth/ui-driver.git"
+    "url": "git+https://github.com/garth/cerebral-module-ui-driver.git"
   },
   "keywords": [
     "cerebral",
-    "material-components"
+    "cerebral-module",
+    "component",
+    "components",
+    "form",
+    "forms"
   ],
   "author": "Garth Williams",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/garth/ui-driver/issues"
+    "url": "https://github.com/garth/cerebral-module-ui-driver/issues"
   },
-  "homepage": "https://github.com/garth/ui-driver#readme",
+  "homepage": "https://github.com/garth/cerebral-module-ui-driver#readme",
   "devDependencies": {
     "babel": "^6.3.26",
-    "babel-cli": "^6.3.17",
-    "babel-core": "^6.3.26",
-    "babel-eslint": "^5.0.0-beta6",
+    "babel-cli": "^6.4.0",
+    "babel-core": "^6.4.0",
     "babel-preset-es2015": "^6.3.13",
     "baobab": "^2.3.0",
-    "cerebral": "^0.28.2",
-    "cerebral-baobab": "^0.4.4",
+    "cerebral": "^0.30.0",
+    "cerebral-model-baobab": "^0.4.5",
     "chai": "^3.4.1",
-    "eslint": "^1.10.3",
     "mocha": "^2.3.4",
-    "moment": "^2.11.0",
+    "moment": "^2.11.1",
     "parallelshell": "^2.0.0",
+    "standard": "^5.4.1",
     "watch": "^0.17.1"
   },
   "dependencies": {
     "email-validator": "^1.0.3"
   },
   "peerDependencies": {
-    "cerebral": "^0.28.0",
-    "moment": "^2.10.6"
+    "cerebral": "^0.30.0",
+    "cerebral-addons": "^0.2.2",
+    "moment": "^2.11.0"
   }
 }

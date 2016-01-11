@@ -1,31 +1,30 @@
-import { expect } from 'chai';
-import sendSignal from '../helpers/sendSignal';
-import controller from '../helpers/controller';
-import registerSignals from '../../src/registerSignals';
-registerSignals(controller);
+/*global beforeEach,afterEach,describe,it*/
+import { expect } from 'chai'
+import sendSignal from '../helpers/sendSignal'
+import controller from '../helpers/controller'
+
+const signals = controller.getSignals()
 
 describe('signals', function () {
-
   afterEach(function () {
-    controller.reset();
-  });
+    controller.reset()
+  })
 
   describe('driver.valuesChanged', function () {
-
-    let tree;
+    let tree
 
     beforeEach(function () {
-      tree = controller.model.tree;
+      tree = controller.model.tree
       tree.set({
         inputValue: null,
         validationKey: null,
         value: null
-      });
-      tree.commit();
-    });
+      })
+      tree.commit()
+    })
 
     it('should copy a value from input to state', function () {
-      return sendSignal(controller, controller.signals.driver.valuesChanged, {
+      return sendSignal(controller, signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
           validationKeyPrefix: 'input',
@@ -40,15 +39,15 @@ describe('signals', function () {
         expect(tree.get()).to.eql({
           inputValue: 'test',
           value: 'test'
-        });
-      });
-    });
+        })
+      })
+    })
 
     it('should copy an invalid value from input to state', function () {
-      tree.set('inputValue', 'test');
-      tree.set('value', 'test');
-      tree.commit();
-      return sendSignal(controller, controller.signals.driver.valuesChanged, {
+      tree.set('inputValue', 'test')
+      tree.set('value', 'test')
+      tree.commit()
+      return sendSignal(controller, signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
           validationKeyPrefix: 'input',
@@ -64,14 +63,14 @@ describe('signals', function () {
           inputValue: '',
           validationKey: 'inputRequired',
           value: 'test'
-        });
-      });
-    });
+        })
+      })
+    })
 
     it('should pick input values from the state tree', function () {
-      tree.set('inputValue', 'test');
-      tree.commit();
-      return sendSignal(controller, controller.signals.driver.valuesChanged, {
+      tree.set('inputValue', 'test')
+      tree.commit()
+      return sendSignal(controller, signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
           validationKeyPrefix: 'input',
@@ -85,12 +84,12 @@ describe('signals', function () {
         expect(tree.get()).to.eql({
           inputValue: 'test',
           value: 'test'
-        });
-      });
-    });
+        })
+      })
+    })
 
     it('should check maxLength', function () {
-      return sendSignal(controller, controller.signals.driver.valuesChanged, {
+      return sendSignal(controller, signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
           validationKeyPrefix: 'input',
@@ -107,12 +106,12 @@ describe('signals', function () {
           inputValue: 'abcd',
           validationKey: 'inputInvalid',
           value: null
-        });
-      });
-    });
+        })
+      })
+    })
 
     it('should detect empty values', function () {
-      return sendSignal(controller, controller.signals.driver.valuesChanged, {
+      return sendSignal(controller, signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
           validationKeyPrefix: 'input',
@@ -128,12 +127,12 @@ describe('signals', function () {
           inputValue: '',
           validationKey: 'inputRequired',
           value: null
-        });
-      });
-    });
+        })
+      })
+    })
 
     it('should detect null values', function () {
-      return sendSignal(controller, controller.signals.driver.valuesChanged, {
+      return sendSignal(controller, signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
           validationKeyPrefix: 'input',
@@ -149,12 +148,12 @@ describe('signals', function () {
           inputValue: null,
           validationKey: 'inputRequired',
           value: null
-        });
-      });
-    });
+        })
+      })
+    })
 
     it('should typecast integers', function () {
-      return sendSignal(controller, controller.signals.driver.valuesChanged, {
+      return sendSignal(controller, signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
           validationKeyPrefix: 'input',
@@ -169,12 +168,12 @@ describe('signals', function () {
         expect(tree.get()).to.eql({
           inputValue: '123',
           value: 123
-        });
-      });
-    });
+        })
+      })
+    })
 
     it('should multiply integers', function () {
-      return sendSignal(controller, controller.signals.driver.valuesChanged, {
+      return sendSignal(controller, signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
           validationKeyPrefix: 'input',
@@ -190,12 +189,12 @@ describe('signals', function () {
         expect(tree.get()).to.eql({
           inputValue: '123',
           value: 246
-        });
-      });
-    });
+        })
+      })
+    })
 
     it('should detect invalid integers', function () {
-      return sendSignal(controller, controller.signals.driver.valuesChanged, {
+      return sendSignal(controller, signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
           validationKeyPrefix: 'input',
@@ -211,12 +210,12 @@ describe('signals', function () {
           inputValue: 'test',
           validationKey: 'inputInvalid',
           value: null
-        });
-      });
-    });
+        })
+      })
+    })
 
     it('should typecast times', function () {
-      return sendSignal(controller, controller.signals.driver.valuesChanged, {
+      return sendSignal(controller, signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
           validationKeyPrefix: 'input',
@@ -232,12 +231,12 @@ describe('signals', function () {
         expect(tree.get()).to.eql({
           inputValue: '8:30',
           value: 510
-        });
-      });
-    });
+        })
+      })
+    })
 
     it('should detect invalid times', function () {
-      return sendSignal(controller, controller.signals.driver.valuesChanged, {
+      return sendSignal(controller, signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
           validationKeyPrefix: 'input',
@@ -254,14 +253,14 @@ describe('signals', function () {
           inputValue: 'test',
           validationKey: 'inputInvalid',
           value: null
-        });
-      });
-    });
+        })
+      })
+    })
 
     it('should convert empty times to null', function () {
-      tree.set('value', 100);
-      tree.commit();
-      return sendSignal(controller, controller.signals.driver.valuesChanged, {
+      tree.set('value', 100)
+      tree.commit()
+      return sendSignal(controller, signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
           validationKeyPrefix: 'input',
@@ -277,12 +276,12 @@ describe('signals', function () {
         expect(tree.get()).to.eql({
           inputValue: '',
           value: null
-        });
-      });
-    });
+        })
+      })
+    })
 
     it('should typecast dates', function () {
-      return sendSignal(controller, controller.signals.driver.valuesChanged, {
+      return sendSignal(controller, signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
           validationKeyPrefix: 'input',
@@ -298,12 +297,12 @@ describe('signals', function () {
         expect(tree.get()).to.eql({
           inputValue: '12/12/2012',
           value: new Date(2012, 11, 12)
-        });
-      });
-    });
+        })
+      })
+    })
 
     it('should detect invalid dates', function () {
-      return sendSignal(controller, controller.signals.driver.valuesChanged, {
+      return sendSignal(controller, signals.driver.valuesChanged, {
         fields: [{
           name: 'input',
           validationKeyPrefix: 'input',
@@ -320,9 +319,8 @@ describe('signals', function () {
           inputValue: 'test',
           validationKey: 'inputInvalid',
           value: null
-        });
-      });
-    });
-  });
-
-});
+        })
+      })
+    })
+  })
+})

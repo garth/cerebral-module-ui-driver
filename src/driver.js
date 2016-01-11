@@ -1,32 +1,31 @@
-import moment from 'moment';
-import sideEffects from './sideEffects';
+import moment from 'moment'
+import sideEffects from './sideEffects'
 
 export default {
-
   registerSideEffect: sideEffects.register,
 
-  createForm(formStatePath) {
-    const formPath = Array.isArray(formStatePath) ? formStatePath : [formStatePath];
-    const formName = formPath.join('.');
-    let validationFields = [];
+  createForm (formStatePath) {
+    const formPath = Array.isArray(formStatePath) ? formStatePath : [formStatePath]
+    const formName = formPath.join('.')
+    let validationFields = []
 
     return {
 
-      state() {
+      state () {
         return {
           driverForm: formPath,
           driverMeta: ['drivers', ...formPath]
-        };
+        }
       },
 
-      getValidationData() {
+      getValidationData () {
         return {
           fields: validationFields
-        };
+        }
       },
 
-      getBindings({ state, signals, t = null, props = {} }) {
-        validationFields = [];
+      getBindings ({ state, signals, t = null, props = {} }) {
+        validationFields = []
 
         const inputProps = function (name, {
           label = null,
@@ -38,12 +37,12 @@ export default {
           required = false,
           signalData = {}
         } = {}) {
-          const useInputValue = typeof value !== 'undefined' && value !== null;
-          const validationKey = state.driverForm && state.driverForm.validation && state.driverForm.validation[name];
-          const isError = !!validationKey;
-          const formattedValue = state.driverForm && format(state.driverForm[name]);
-          const displayValue = useInputValue ? value : formattedValue;
-          const statePath = [...formPath, name];
+          const useInputValue = typeof value !== 'undefined' && value !== null
+          const validationKey = state.driverForm && state.driverForm.validation && state.driverForm.validation[name]
+          const isError = !!validationKey
+          const formattedValue = state.driverForm && format(state.driverForm[name])
+          const displayValue = useInputValue ? value : formattedValue
+          const statePath = [...formPath, name]
           const signalInput = Object.assign({
             formName,
             name,
@@ -54,18 +53,18 @@ export default {
             validationType,
             validationKeyPrefix: t ? name : '',
             required
-          }, signalData);
-          validationFields.push(signalInput);
-          let message = '';
+          }, signalData)
+          validationFields.push(signalInput)
+          let message = ''
           if (isError) {
             if (t) {
-              message = t[validationKey] ? t[validationKey]() : validationKey;
+              message = t[validationKey] ? t[validationKey]() : validationKey
             } else {
-              const key = validationKey.toLowerCase();
-              message = messages[key] ? messages[key] : key;
+              const key = validationKey.toLowerCase()
+              message = messages[key] ? messages[key] : key
             }
           } else if (useInputValue && formattedValue !== value) {
-            message = formattedValue;
+            message = formattedValue
           }
           return Object.assign({
             label: label !== null
@@ -77,91 +76,91 @@ export default {
             type: inputType,
             isError,
             message,
-            onChange(e) {
+            onChange (e) {
               signals.driver.valuesChanged({
                 fields: [
                   Object.assign({
                     inputValue: e.target.value
                   }, signalInput)
                 ]
-              });
+              })
             }
-          }, props);
-        };
+          }, props)
+        }
 
         const inputTimeProps = function (name, options = {}) {
-          const timeFormat = options.timeFormat ? options.timeFormat : 'H:mm';
+          const timeFormat = options.timeFormat ? options.timeFormat : 'H:mm'
           return inputProps(name, Object.assign({
             format: value => value === null ? '' : moment(value * 1000 * 60).utcOffset(0).format(timeFormat),
             validationType: 'time',
             signalData: { timeFormat }
-          }, options));
-        };
+          }, options))
+        }
 
         const inputDateProps = function (name, options = {}) {
-          const dateFormat = options.dateFormat ? options.dateFormat : 'L';
+          const dateFormat = options.dateFormat ? options.dateFormat : 'L'
           return inputProps(name, Object.assign({
             format: value => value === null ? '' : moment(value).format(dateFormat),
             validationType: 'date',
             signalData: { dateFormat }
-          }, options));
-        };
+          }, options))
+        }
 
         const inputIntProps = function (name, options = {}) {
           return inputProps(name, Object.assign({
             format: value => value === null ? '' : '' + value,
             validationType: 'int'
-          }, options));
-        };
+          }, options))
+        }
 
         const inputEmailProps = function (name, options = {}) {
           return inputProps(name, Object.assign({
             validationType: 'email'
-          }, options));
-        };
+          }, options))
+        }
 
         const inputPasswordProps = function (name, options = {}) {
           return inputProps(name, Object.assign({
             validationType: options.checkStrength ? 'password' : 'string',
             inputType: 'password'
-          }, options));
-        };
+          }, options))
+        }
 
         const inputEqualsProps = function (name, compare, options = {}) {
           return inputProps(name, Object.assign({
             validationType: 'equal',
             signalData: { compare }
-          }, options));
-        };
+          }, options))
+        }
 
         const menuOpenProps = function (name, {
           eventType = 'onTouchTap'
         } = {}) {
-          const statePath = [...formPath, name];
-          const driverPath = ['drivers', ...statePath];
-          const isOpenPath = [...driverPath, 'isOpen'];
-          const p = {};
+          const statePath = [...formPath, name]
+          const driverPath = ['drivers', ...statePath]
+          const isOpenPath = [...driverPath, 'isOpen']
+          const p = {}
           p[eventType] = () => signals.driver.isOpenChanged({
             statePath: isOpenPath,
             value: true
-          });
-          return Object.assign(p, props);
-        };
+          })
+          return Object.assign(p, props)
+        }
 
         const menuProps = function (name) {
-          const statePath = [...formPath, name];
-          const driverPath = ['drivers', ...statePath];
-          const isOpenPath = [...driverPath, 'isOpen'];
+          const statePath = [...formPath, name]
+          const driverPath = ['drivers', ...statePath]
+          const isOpenPath = [...driverPath, 'isOpen']
           return Object.assign({
             isOpen: !!(state.driverMeta && state.driverMeta[name] && state.driverMeta[name].isOpen),
-            onClose() {
+            onClose () {
               signals.driver.isOpenChanged({
                 statePath: isOpenPath,
                 value: false
-              });
+              })
             }
-          }, props);
-        };
+          }, props)
+        }
 
         const selectProps = function (name, selectOptions, options = {}) {
           return Object.assign(
@@ -171,15 +170,15 @@ export default {
               validationType: 'none'
             }, options)),
             menuOpenProps(name, { eventType: 'onOpen' }),
-            menuProps(name));
-        };
+            menuProps(name))
+        }
 
         const checkboxProps = function (name, options = {}) {
           return inputProps(name, Object.assign({
             value: null,
             validationType: 'none'
-          }, options));
-        };
+          }, options))
+        }
 
         return {
           checkboxProps,
@@ -193,9 +192,8 @@ export default {
           menuOpenProps,
           menuProps,
           selectProps
-        };
+        }
       }
-    };
+    }
   }
-
-};
+}

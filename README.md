@@ -352,7 +352,7 @@ driver.registerSideEffect('formName', 'fieldName', function sideEffectFunction(f
 Fork repo
 
 * `npm install`
-* `npm run dev` runs dev mode which watches for changes and auto lints, tests and builds
+* `npm start` runs dev mode which watches for changes and auto lints, tests and builds
 * `npm test` runs the tests
 * `npm run lint` lints the code
 * `npm run build` compiles es6 to es5

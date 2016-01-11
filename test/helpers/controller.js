@@ -1,16 +1,18 @@
-import Controller from 'cerebral';
-import Model from 'cerebral-baobab';
+import Controller from 'cerebral'
+import Model from 'cerebral-model-baobab'
+import driver from '../../src'
 
-const state = {
-  locale: 'en'
-};
-
-const model = Model(state);
-const controller = Controller(model, {});
-controller.model = model;
+const model = Model({})
+const controller = Controller(model)
+controller.model = model
 controller.reset = () => {
-  model.tree.set(state);
-  model.tree.commit();
-};
+  model.tree.set({})
+  model.tree.commit()
+}
 
-export default controller;
+// register the driver module
+controller.modules({
+  driver: driver({})
+})
+
+export default controller

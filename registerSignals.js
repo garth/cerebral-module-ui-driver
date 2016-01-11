@@ -1,1 +1,1 @@
-module.exports = require('./lib/registerSignals').default;
+module.exports = require('./lib/registerSignals').default
