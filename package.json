@@ -22,7 +22,8 @@
     "component",
     "components",
     "form",
-    "forms"
+    "forms",
+    "validation"
   ],
   "author": "Garth Williams",
   "license": "MIT",
