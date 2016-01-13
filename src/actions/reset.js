@@ -1,4 +1,4 @@
-export function resetFormDriver (statePath) {
+export default function resetFormDriver (statePath) {
   const formPath = Array.isArray(statePath) ? statePath : [statePath]
   const driverPath = ['drivers', ...formPath]
   const validationPath = [...formPath, 'validation']

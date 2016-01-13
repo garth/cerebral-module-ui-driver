@@ -1,13 +1,13 @@
 {
   "name": "cerebral-module-ui-driver",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A driver for connecting ui components to cerebral",
   "main": "lib/index.js",
   "scripts": {
-    "lint": "standard src/**/*.js test/**/*.js",
-    "start": "parallelshell 'babel src --watch --out-dir lib' 'watch --wait=1 \"npm run lint && mocha --compilers js:babel-core/register --recursive --reporter dot\" src test'",
+    "lint": "standard src/**/*.js test/**/*.js --verbose | snazzy",
+    "start": "parallelshell 'babel src --watch --out-dir lib' 'watch --wait=1 \"npm run lint --silent && mocha --compilers js:babel-core/register --recursive --reporter dot\" src test'",
     "prebuild": "npm run lint",
-    "build": "babel src --out-dir lib",
+    "build": "rimraf lib && babel src --out-dir lib",
     "pretest": "npm run lint",
     "test": "mocha --compilers js:babel-core/register --recursive",
     "prepublish": "npm run build"
@@ -43,6 +43,8 @@
     "mocha": "^2.3.4",
     "moment": "^2.11.1",
     "parallelshell": "^2.0.0",
+    "rimraf": "^2.5.0",
+    "snazzy": "^2.0.1",
     "standard": "^5.4.1",
     "watch": "^0.17.1"
   },
@@ -50,8 +52,8 @@
     "email-validator": "^1.0.3"
   },
   "peerDependencies": {
-    "cerebral": "^0.30.0",
-    "cerebral-addons": "^0.2.2",
+    "cerebral": "^0.31.0",
+    "cerebral-addons": "^0.2.3",
     "moment": "^2.11.0"
   }
 }
