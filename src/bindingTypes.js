@@ -1,5 +1,6 @@
 export default [
   'checkbox',
+  'form',
   'input',
   'inputDate',
   'inputEmail',

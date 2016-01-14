@@ -1,6 +1,5 @@
 export default {
   base: {
-    label: 'label',
     value: 'value',
     onChange: 'onChange',
     isError: 'isError',
@@ -9,6 +8,9 @@ export default {
     isOpen: 'isOpen',
     onOpen: 'onOpen',
     onClose: 'onClose'
+  },
+  form: {
+    onSubmit: 'onSubmit'
   },
   menuOpen: {
     onOpen: 'onClick'

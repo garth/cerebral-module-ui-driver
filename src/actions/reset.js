@@ -1,9 +1,4 @@
-export default function resetFormDriver (statePath) {
-  const formPath = Array.isArray(statePath) ? statePath : [statePath]
-  const driverPath = ['drivers', ...formPath]
-  const validationPath = [...formPath, 'validation']
-  return function resetForm ({ state }) {
-    state.set(driverPath, {})
-    state.unset(validationPath)
-  }
+export default function resetDriver ({ module, modules }) {
+  const driverModule = modules['cerebral-module-ui-driver']
+  driverModule.state.set(module.name, {})
 }
