@@ -3,10 +3,12 @@ import valuesChanged from './chains/valuesChanged'
 import defaultPropsMaps from './propsMaps'
 import bindingTypes from './bindingTypes'
 import defaultCasts from './casts'
+import defaultFormatters from './formatters'
 
 export default (options = {}, propsMaps = {}) => {
   // set undefined options
   options.casts = Object.assign({}, defaultCasts, options.casts)
+  options.formatters = Object.assign({} defaultFormatters, options.formatters)
   options.dateFormat = options.dateFormat || 'L'
   options.timeFormat = options.timeFormat || 'H:mm'
   options.invalidDateMessage = options.invalidDateMessage || 'Invalid date'
