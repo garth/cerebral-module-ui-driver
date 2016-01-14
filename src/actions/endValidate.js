@@ -1,5 +1,8 @@
-export default function validate ({ modules, input: { moduleName, fields, error }, output }) {
+export default function validate (args) {
+  const { modules, input: { moduleName, fields, error }, output } = args
   const driverModule = modules['cerebral-module-ui-driver']
+  const formModule = modules[moduleName]
+  const form = formModule.meta.form
 
   let isValid = driverModule.get([moduleName, 'isValid'])
 
@@ -16,6 +19,10 @@ export default function validate ({ modules, input: { moduleName, fields, error 
 
   driverModule.state.set([moduleName, 'isValidating'], false)
   driverModule.state.set([moduleName, 'isValid'], isValid)
+
+  if (typeof form.afterValidate === 'function') {
+    form.afterValidate(args)
+  }
 
   return isValid ? output.success() : output.error()
 }

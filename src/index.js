@@ -1,5 +1,5 @@
 import isOpenChanged from './chains/isOpenChanged'
-import validate from './chains/validate'
+import valueChanged from './chains/valueChanged'
 import defaultPropsMaps from './propsMaps'
 import bindings from './bindings'
 import defaultCasts from './casts'
@@ -30,12 +30,8 @@ export default (options = {}, propsMaps = {}) => {
     module.alias('cerebral-module-ui-driver')
 
     // register signals
-    module.signals({
-      isOpenChanged
-    })
-    module.signalsSync({
-      validate
-    })
+    module.signals({ isOpenChanged })
+    module.signalsSync({ valueChanged })
 
     // register services
     module.services({

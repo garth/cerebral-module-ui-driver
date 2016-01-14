@@ -15,7 +15,7 @@ export default function validate ({ module, modules, input: { moduleName, fields
     let value
     if (singleField) {
       // single field validation values come from input and may need to be cast
-      value = field.type && driverOptions.casts[field.type]
+      value = !field.noCasting && field.type && driverOptions.casts[field.type]
         ? driverOptions.casts[field.type](field.value, Object.assign({}, driverOptions, formOptions))
         : { isTypeValid: true, typedValue: field.value }
     } else {

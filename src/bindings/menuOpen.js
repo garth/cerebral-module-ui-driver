@@ -4,7 +4,7 @@ export default function ({
   props,
   propsMap
 }) {
-  return function (fieldName, fieldProps) {
+  return function bindMenuOption (fieldName, fieldProps) {
     const statePath = [moduleName, fieldName]
     const driverPath = [driverModule.name, ...statePath]
     const isOpenPath = [...driverPath, 'isOpen']

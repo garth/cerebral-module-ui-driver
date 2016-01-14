@@ -1,10 +1,9 @@
 export default function ({
   formModule,
-  driverModule,
   props,
   propsMap
 }) {
-  return function (fieldProps) {
+  return function bindForm (signal, fieldProps) {
     const formFields = formModule.meta.form.fields
 
     const fields = Object.keys(formFields).reduce((fields, name) => {
@@ -16,9 +15,7 @@ export default function ({
 
     return Object.assign({
       [propsMap['onSubmit']]: function onSubmit () {
-        driverModule.signals.validate({
-          fields
-        })
+        signal({ fields })
       }
     }, props, fieldProps)
   }
