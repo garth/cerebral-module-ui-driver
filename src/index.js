@@ -1,20 +1,21 @@
 import isOpenChanged from './chains/isOpenChanged'
-import valuesChanged from './chains/valuesChanged'
+import validate from './chains/validate'
 import defaultPropsMaps from './propsMaps'
-import bindingTypes from './bindingTypes'
+import bindings from './bindings'
 import defaultCasts from './casts'
 import defaultFormatters from './formatters'
 
 export default (options = {}, propsMaps = {}) => {
   // set undefined options
+  options.bindings = Object.assign({}, bindings, options.bindings)
+  options.bindingTypes = options.bindingTypes || Object.keys(options.bindings)
   options.casts = Object.assign({}, defaultCasts, options.casts)
-  options.formatters = Object.assign({} defaultFormatters, options.formatters)
+  options.formatters = Object.assign({}, defaultFormatters, options.formatters)
   options.dateFormat = options.dateFormat || 'L'
   options.timeFormat = options.timeFormat || 'H:mm'
   options.invalidDateMessage = options.invalidDateMessage || 'Invalid date'
   options.invalidNumberMessage = options.invalidNumberMessage || 'Invalid number'
   options.invalidTimeMessage = options.invalidTimeMessage || 'Invalid time'
-  options.bindingTypes = options.bindingTypes || bindingTypes
   // configure props maps
   options.bindingTypes.forEach(binding => {
     propsMaps[binding] = Object.assign({},
@@ -23,10 +24,6 @@ export default (options = {}, propsMaps = {}) => {
       defaultPropsMaps[binding],
       propsMaps[binding])
   })
-  // configure bindings
-  options.bindings = Object.assign(
-    bindingTypes.reduce((bindings, binding) => bindings[binding] = require(`./bindings/${binding}`), {}),
-    options.bindings)
 
   // prepare the module
   return (module) => {
@@ -37,7 +34,7 @@ export default (options = {}, propsMaps = {}) => {
       isOpenChanged
     })
     module.signalsSync({
-      valuesChanged
+      validate
     })
 
     // register services
