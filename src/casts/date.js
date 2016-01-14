@@ -7,7 +7,7 @@ export default function date (value, { dateFormat, invalidDateMessage } = {}) {
     value
   }
   if (typeof value === 'string' && value.length > 0) {
-    const date = moment(value, dateFormat)
+    const date = moment.utc(value, dateFormat, true)
     if (date.isValid()) {
       result.typedValue = date.toDate()
     } else {
