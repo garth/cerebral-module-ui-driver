@@ -23,8 +23,8 @@ export default function ({
     const formValue = getMeta(state, statePath)
     const meta = getMeta(state, driverPath) || {}
     const useInputValue = typeof meta.value !== 'undefined' && meta.value !== null
-    const field = formModule.meta.form.fields[fieldName]
-    const formattedValue = noFormatting ? formValue : format(formValue, driverModule.meta.options.casts[field.type])
+    const field = formModule.meta.form.fields[fieldName] || {}
+    const formattedValue = noFormatting ? formValue : format(formValue, driverModule.meta.options.formatters[field.type])
     const value = useInputValue ? meta.value : formattedValue
 
     // if the field is not formatted then it should't be cast
@@ -35,9 +35,10 @@ export default function ({
       [propsMap['isError']]: !!meta.error,
       [propsMap['message']]: !meta.error && useInputValue && formattedValue !== value ? formattedValue : meta.error,
       [propsMap['onChange']]: function (e) {
-        driverModule.signals.valueChanged({
+        driverModule.meta.signals.valueChanged({
+          moduleName: formModule.name,
           fields: [{
-            name: field.name,
+            name: fieldName,
             type: field.type,
             value: e.target.value
           }]

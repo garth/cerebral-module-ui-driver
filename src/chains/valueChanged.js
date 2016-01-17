@@ -3,10 +3,15 @@ import beginValidate from '../actions/beginValidate'
 import doValidate from '../actions/doValidate'
 import endValidate from '../actions/endValidate'
 
-export default [
-  beginValidate,
-  debounce(200, [
-    [ doValidate ],
-    endValidate
-  ])
-]
+export default function (debounceTimeout) {
+  return [
+    beginValidate,
+    debounce(debounceTimeout, [
+      [ doValidate ],
+      endValidate, {
+        success: [],
+        error: []
+      }
+    ])
+  ]
+}

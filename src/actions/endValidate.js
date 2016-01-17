@@ -4,7 +4,7 @@ export default function validate (args) {
   const formModule = modules[moduleName]
   const form = formModule.meta.form
 
-  let isValid = driverModule.get([moduleName, 'isValid'])
+  let isValid = driverModule.state.get([moduleName, 'isValid'])
 
   if (error) {
     isValid = false

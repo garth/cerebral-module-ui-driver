@@ -3,11 +3,11 @@ export default function validate ({ module, modules, input: { moduleName, fields
   const formModule = modules[moduleName]
   const form = formModule.meta.form
 
-  Promise.all(fields.maps(field => new Promise(resolve => {
-    form[field.name].validate({
+  Promise.all(fields.map(field => new Promise(resolve => {
+    form.fields[field.name].validate({
       module: formModule,
       field
-    }, error => {
+    }, function (error) {
       field.isValidating = false
       if (error) {
         field.isValid = false

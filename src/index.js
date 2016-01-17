@@ -13,9 +13,9 @@ export default (options = {}, propsMaps = {}) => {
   options.formatters = Object.assign({}, defaultFormatters, options.formatters)
   options.dateFormat = options.dateFormat || 'L'
   options.timeFormat = options.timeFormat || 'H:mm'
-  options.invalidDateMessage = options.invalidDateMessage || 'Invalid date'
-  options.invalidNumberMessage = options.invalidNumberMessage || 'Invalid number'
-  options.invalidTimeMessage = options.invalidTimeMessage || 'Invalid time'
+  options.invalidDateMessage = options.invalidDateMessage || 'invalid date'
+  options.invalidNumberMessage = options.invalidNumberMessage || 'invalid number'
+  options.invalidTimeMessage = options.invalidTimeMessage || 'invalid time'
   // configure props maps
   options.bindingTypes.forEach(binding => {
     propsMaps[binding] = Object.assign({},
@@ -31,15 +31,14 @@ export default (options = {}, propsMaps = {}) => {
 
     // register signals
     module.signals({ isOpenChanged })
-    module.signalsSync({ valueChanged })
-
-    // register services
-    module.services({
-      options,
-      propsMaps
+    module.signalsSync({
+      valueChanged: valueChanged(options.debounceTimeout || 200)
     })
 
     return {
+      signals: module.getSignals(),
+      options,
+      propsMaps,
       isUiDriverModule: true
     }
   }

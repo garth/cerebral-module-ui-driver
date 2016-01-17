@@ -30,7 +30,7 @@ export default function validate ({ module, modules, input: { moduleName, fields
     if (value.isTypeValid) {
       value.isValid = true
       // update the form value
-      formModule.set(field.name, value.typedValue)
+      formModule.state.set(field.name, value.typedValue)
       // validate the value
       if (typeof form.fields[field.name].validate === 'function') {
         value.isValidating = true
@@ -43,11 +43,11 @@ export default function validate ({ module, modules, input: { moduleName, fields
     }
 
     // update the driver form value
-    driverModule.set(fieldPath, value)
+    driverModule.state.set(fieldPath, value)
   })
 
-  driverModule.set([moduleName, 'isValid'], isValid)
-  driverModule.set([moduleName, 'isValidating'], true)
+  driverModule.state.set([moduleName, 'isValid'], isValid)
+  driverModule.state.set([moduleName, 'isValidating'], true)
 
-  output({ moduleName, fields, values, validateForm: !singleField })
+  output({ moduleName, fields: values, validateForm: !singleField })
 }

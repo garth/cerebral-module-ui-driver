@@ -11,5 +11,6 @@ export default function ({ moduleName, modules, state, props }) {
       props,
       propsMap: propsMaps[binding]
     })
+    return bindings
   }, {})
 }
