@@ -1,1 +1,1 @@
-module.exports = require('../lib/chains/valueChanged').default
+module.exports = require('../lib/chains/validate').default
