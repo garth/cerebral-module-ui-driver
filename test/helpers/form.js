@@ -4,7 +4,8 @@ import reset from '../../src/actions/reset'
 export default module => {
   module.state({
     email: '',
-    number: 0
+    number: 0,
+    acceptTerms: false
   })
   module.signals({
     submitForm: [
@@ -27,6 +28,9 @@ export default module => {
           validate ({ module, field }, done) {
             done(field.typedValue > 10 ? 'too big' : '')
           }
+        },
+        acceptTerms: {
+          type: 'bool'
         }
       }
     }

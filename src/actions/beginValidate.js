@@ -32,7 +32,8 @@ export default function validate ({ module, modules, input: { moduleName, fields
       // update the form value
       formModule.state.set(field.name, value.typedValue)
       // validate the value
-      if (typeof form.fields[field.name].validate === 'function') {
+      const formField = form.fields[field.name] || {}
+      if (typeof formField.validate === 'function') {
         value.isValidating = true
         values.push(value)
       }

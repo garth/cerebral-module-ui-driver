@@ -1,3 +1,3 @@
-export default function setStateValue ({ input, state }) {
-  state.set(input.statePath, input.value)
+export default function setStateValue ({ input: { statePath, value }, state }) {
+  state.set(statePath, value)
 }

@@ -18,7 +18,7 @@ describe('bindings', function () {
     controller.reset()
   })
 
-  describe('inputBinding', function () {
+  describe('input', function () {
     beforeEach(function () {
       tree = controller.model.tree
       tree.set({ form: { email: '', number: 0 } })

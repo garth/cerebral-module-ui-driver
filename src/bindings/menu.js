@@ -8,16 +8,15 @@ export default function ({
   propsMap
 }) {
   return function bindMenu (fieldName, fieldProps) {
-    const statePath = [...formModule.path, fieldName]
-    const driverPath = [...driverModule.path, ...statePath]
+    const driverPath = [...driverModule.path, ...formModule.path, 'fields', fieldName]
     const isOpenPath = [...driverPath, 'isOpen']
 
-    const meta = getMeta(state, formModule.path)
+    const meta = getMeta(state, driverPath) || {}
 
     return Object.assign({
-      [propsMap['isOpen']]: !!(meta && meta[fieldName] && meta[fieldName].isOpen),
+      [propsMap['isOpen']]: !!meta.isOpen,
       [propsMap['onClose']]: function onClose () {
-        driverModule.signals.isOpenChanged({
+        driverModule.meta.signals.isOpenChanged({
           statePath: isOpenPath,
           value: false
         })
