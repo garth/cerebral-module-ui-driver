@@ -1,12 +1,11 @@
-export default function ({ moduleName, modules, state, props }) {
+export default function ({ module, modules, state, props }) {
   const driverModule = modules['cerebral-module-ui-driver']
-  const formModule = modules[moduleName]
   const driverOptions = driverModule.meta.options
   const propsMaps = driverModule.meta.propsMaps
   return driverOptions.bindingTypes.reduce((bindings, binding) => {
     bindings[binding] = driverOptions.bindings[binding]({
       driverModule,
-      formModule,
+      formModule: module,
       state,
       props,
       propsMap: propsMaps[binding]

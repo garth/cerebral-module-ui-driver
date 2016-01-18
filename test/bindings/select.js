@@ -3,9 +3,10 @@ import { expect } from 'chai'
 import controller from '../helpers/controller'
 import driver from '../../src/driver'
 
+const modules = controller.getModules()
 let tree
 const bind = function () {
-  return driver({ moduleName: 'form', modules: controller.getModules(), state: tree.get() })
+  return driver({ module: modules.form, modules, state: tree.get() })
 }
 
 describe('bindings', function () {

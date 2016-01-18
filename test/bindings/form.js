@@ -4,11 +4,11 @@ import onSignalEnd from '../helpers/onSignalEnd'
 import controller from '../helpers/controller'
 import driver from '../../src/driver'
 
-const signals = controller.getModules().form.meta.signals
-
+const modules = controller.getModules()
+const signals = modules.form.meta.signals
 let tree
 const bind = function () {
-  return driver({ moduleName: 'form', modules: controller.getModules(), state: tree.get() })
+  return driver({ module: modules.form, modules, state: tree.get() })
 }
 
 describe('bindings', function () {
