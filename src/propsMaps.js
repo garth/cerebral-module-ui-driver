@@ -2,6 +2,7 @@ export default {
   base: {
     value: 'value',
     onChange: 'onChange',
+    isValidating: 'isValidating',
     isError: 'isError',
     message: 'message',
     type: 'type',

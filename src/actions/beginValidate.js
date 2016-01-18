@@ -4,7 +4,7 @@ export default function validate ({ module, modules, input: { moduleName, fields
   const formModule = modules[moduleName]
   const form = formModule.meta.form
   const driverOptions = driverModule.meta.options
-  const formOptions = form.driverOptions
+  const formOptions = form.driverOptions || {}
   const values = []
 
   let isValid = true
@@ -47,7 +47,7 @@ export default function validate ({ module, modules, input: { moduleName, fields
     driverModule.state.set(fieldPath, value)
   })
 
-  driverModule.state.set([moduleName, 'isValid'], isValid)
+  driverModule.state.set([moduleName, 'error'], isValid ? '' : formOptions.invalidMessage || driverOptions.invalidMessage)
   driverModule.state.set([moduleName, 'isValidating'], true)
 
   output({ moduleName, fields: values, validateForm: !singleField })

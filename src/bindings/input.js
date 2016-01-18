@@ -33,6 +33,7 @@ export default function ({
     return Object.assign({
       [propsMap['value']]: value,
       [propsMap['isError']]: !!meta.error,
+      [propsMap['isValidating']]: !!meta.isValidating,
       [propsMap['message']]: !meta.error && useInputValue && formattedValue !== value ? formattedValue : meta.error,
       [propsMap['onChange']]: function (e) {
         driverModule.meta.signals.valueChanged({

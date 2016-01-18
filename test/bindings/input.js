@@ -4,10 +4,6 @@ import onSignalEnd from '../helpers/onSignalEnd'
 import controller from '../helpers/controller'
 import driver from '../../src/driver'
 
-// const signals = controller.getSignals()
-// const driverModule = controller.getModules().driver
-// const formModule = controller.getModules().form
-
 let tree
 const bind = function () {
   return driver({ moduleName: 'form', modules: controller.getModules(), state: tree.get() })
@@ -29,6 +25,7 @@ describe('bindings', function () {
       let props = bind().input('email')
       expect(props.value).to.equal('')
       expect(props.isError).to.be.false
+      expect(props.isValidating).to.be.false
       expect(props.message).to.be.undefined
       expect(props.onChange).to.be.a.function
       expect(props.type).to.equal('text')
@@ -40,6 +37,7 @@ describe('bindings', function () {
         props = bind().input('email')
         expect(props.value).to.equal('test')
         expect(props.isError).to.be.false
+        expect(props.isValidating).to.be.false
         expect(props.message).to.be.undefined
         expect(props.onChange).to.be.a.function
         expect(props.type).to.equal('text')
@@ -54,6 +52,7 @@ describe('bindings', function () {
         props = bind().input('number', { type: 'number' })
         expect(props.value).to.equal('x')
         expect(props.isError).to.be.true
+        expect(props.isValidating).to.be.false
         expect(props.message).to.equal('invalid number')
         expect(props.onChange).to.be.a.function
         expect(props.type).to.equal('number')
@@ -69,6 +68,7 @@ describe('bindings', function () {
         expect(tree.get(['form', 'number'])).to.equal(5)
         expect(props.value).to.equal('5')
         expect(props.isError).to.be.false
+        expect(props.isValidating).to.be.false
         expect(props.message).to.equal('')
         expect(props.onChange).to.be.a.function
         expect(props.type).to.equal('number')
@@ -83,6 +83,7 @@ describe('bindings', function () {
         props = bind().input('number', { type: 'number' })
         expect(props.value).to.equal('11')
         expect(props.isError).to.be.true
+        expect(props.isValidating).to.be.false
         expect(props.message).to.equal('too big')
         expect(props.onChange).to.be.a.function
         expect(props.type).to.equal('number')

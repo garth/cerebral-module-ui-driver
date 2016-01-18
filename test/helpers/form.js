@@ -18,6 +18,7 @@ export default module => {
     ]
   })
   return {
+    signals: module.getSignals(),
     form: {
       fields: {
         email: {
@@ -28,6 +29,9 @@ export default module => {
           validate ({ module, field }, done) {
             done(field.typedValue > 10 ? 'too big' : '')
           }
+        },
+        select: {
+          type: 'int'
         },
         acceptTerms: {
           type: 'bool'

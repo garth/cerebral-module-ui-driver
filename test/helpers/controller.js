@@ -13,7 +13,9 @@ controller.reset = () => {
 
 // register the driver module
 controller.modules({
-  driver: driver({}),
+  driver: driver({
+    debounceTimeout: 0
+  }),
   form
 })
 
