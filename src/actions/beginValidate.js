@@ -20,7 +20,8 @@ export default function validate ({ module, modules, input: { moduleName, fields
         : { isTypeValid: true, typedValue: field.value }
     } else {
       // form validation values come from state (previous single field validation result is used if found)
-      value = driverModule.state.get(fieldPath) || {
+      value = driverModule.state.get(fieldPath)
+      value = value ? Object.assign({}, value) : {
         isTypeValid: true,
         typedValue: formModule.state.get(field.name)
       }
