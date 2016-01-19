@@ -2,7 +2,7 @@
   "name": "cerebral-module-ui-driver",
   "version": "0.6.1",
   "description": "A driver for connecting ui components to cerebral",
-  "main": "lib/index.js",
+  "main": "lib/driver.js",
   "scripts": {
     "lint": "standard src/**/*.js test/**/*.js --verbose | snazzy",
     "start": "parallelshell 'babel src --watch --out-dir lib' 'watch --wait=1 \"npm run lint --silent && mocha --compilers js:babel-core/register --recursive --reporter dot\" src test'",
