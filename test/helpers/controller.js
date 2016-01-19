@@ -1,6 +1,6 @@
 import Controller from 'cerebral'
 import Model from 'cerebral-model-baobab'
-import driver from '../../src'
+import driver from '../../src/module'
 import form from './form'
 
 const model = Model({})

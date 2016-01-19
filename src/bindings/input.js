@@ -23,7 +23,7 @@ export default function ({
     const formValue = getMeta(state, statePath)
     const meta = getMeta(state, driverPath) || {}
     const useInputValue = typeof meta.value !== 'undefined' && meta.value !== null
-    const field = formModule.meta.form.fields[fieldName] || {}
+    const field = (formModule.meta.form && formModule.meta.form.fields && formModule.meta.form.fields[fieldName]) || {}
     const formattedValue = noFormatting ? formValue : format(formValue, driverModule.meta.options.formatters[field.type])
     const value = useInputValue ? meta.value : formattedValue
 

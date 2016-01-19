@@ -26,8 +26,8 @@ export default module => {
         },
         number: {
           type: 'int',
-          validate ({ module, field }, done) {
-            done(field.typedValue > 10 ? 'too big' : '')
+          validate (value, done) {
+            done(value > 10 ? 'too big' : '')
           }
         },
         select: {
@@ -36,6 +36,12 @@ export default module => {
         acceptTerms: {
           type: 'bool'
         }
+      },
+      validate (values, done) {
+        done()
+      },
+      onAfterValidate ({input, state, output, services, fields, isValid, isFormValidation, isFieldValidation}) {
+        // console.log(fields)
       }
     }
   }
