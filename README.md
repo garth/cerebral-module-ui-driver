@@ -1,6 +1,6 @@
-# ui-driver
+# cerebral-module-ui-driver
 
-The ui-driver is helper that simplifies the connecting of [material-components](http://garth.github.io/material-components) (React form components) or [snabbdom-material](http://garth.github.io/snabbdom-material) (snabbdom form components) to [cerebral](http://www.cerebraljs.com/). It automates signals, validation, i18n and more to simplify and reduce repetative code in React and snabbdom form components.
+cerebral-module-ui-driver is the glue that connects your [cerebral](http://www.cerebraljs.com/) immutable data to any jsx style UI library including react, snabbdom and others. It automates signals, type casting and async validation to simplify and reduce boilerplate code in your UI components and keep your UI layer pure.
 
 ## Overview
 
@@ -19,246 +19,172 @@ When the user interface is pure and all app state is managed centrally, hooking 
   onClose={setClosedState}/>
 ```
 
-Whist not complicated, we need to hookup the selected value, list items and onChange events. But becuase this Select control does a little more we also need to hookup the label, error status and message. Finally, since this is a pure component, we also need to pass the isOpen state and handle the onOpen and onClose events which toggle the isOpen state.
+Whist not complicated, we need to hookup the selected value, list items and onChange events. But because this Select control does a little more we also need to hookup the label, error status and message. Finally, since this is a pure component, we also need to pass the isOpen state and handle the onOpen and onClose events which toggle the isOpen state.
 
-What you also don't see is the work that each event handler must do, which can ammount to 2 or 3 times as much code again. And for some controlls where we need to do validation, such as email inputs or password complixity checks, this can add up to much more.
-
-Imagine now that we have a form with 10 or even 20 of these components. Together with other markup and event handling we have a lot of repetative typing to do. What if instead of manually hooking up the properties and events we could just do the following:
+Imagine now that we have a form with 10 or even 20 of these components. Together with other markup and event handling we have a lot of typing to do. What if instead of manually hooking up the properties and events we could just do the following:
 
 ```js
-<Select ...bindings.selectProps('options', options)/>
+<Select {...bind.select('name', { options })}/>
 ```
 
-This is the ui-driver. All background event handling is built-in as well as field and form level validation.
+This is cerebreal-module-ui-driver. All background event handling is built-in as well as type casting, field and form level validation.
 
-## Example
+## Install
 
-Let's take the example of a sign-in form.
+```
+npm install cerebral-module-ui-driver
+```
+
+## Usage
+
+The ui driver assumes that each form in your application will be placed in its own module. This is not a bad assumption as this will encourge modular and well structured cerebral applications.
+
+From your main.js
 
 ```js
-// signin component
+// your cerebral controller
+import controller from './controller'
 
-import React, { Component, PropTypes } from 'react';
-import { Decorator as State } from 'cerebral-react';
-import { Form, Button, Input, Row, Col } from 'material-components';
-import driver from 'ui-driver';
-import i18n from 'i18n-lib';
+import driver from 'cerebral-module-ui-driver/module'
+import auth from './modules/auth'
 
-// create an instance of the form driver that is bound to the /signin object
-// in the state tree
-const formDriver = driver.createForm(['signin']);
+// configure modules
+const modules = {
+  driver: driver({
+    // driver options go here
+  }),
+  auth
+}
 
-// the form driver will generate the neccessary cerebral properties that it
-// needs
-@State(Object.assign({
-  locale: ['locale']
-}, formDriver.state()))
-export default class Signin extends Component {
-  render() {
-    const {
-      locale,
-      signals
-    } = this.props;
+// init the modules
+controller.modules(modules)
+```
 
-    // This is an optional translation library, without this the field labels
-    // and error messages can be defined directly on each binding.
-    // We use messageformat (https://github.com/SlexAxton/messageformat.js), but
-    // any object t that has function properties that return a string should
-    // work (eg t.emailLabel() => 'Email')
-    const t = i18n(locale, 'signin');
+In your form module you need to define your form fields and specify optional validation. All validation methods are async and need to call `done([errorMessageString])` when complete. ui driver will debounce validation calls by default, but will ensure that the final validation check goes through before allowing the form to be submitted.
 
-    // create the bindings by passing the current state, signals and optional t
-    // to the form driver
-    const bindings = formDriver.getBindings({ state: this.props, signals, t });
+```js
+import Component from './components'
+import signinSubmitted from './chains/signinSubmitted'
 
-    // create the form, notice the formDriver.getValidationData() that is
-    // passed to the onSubmit signal, this will gather all form data and pass
-    // it to the ui-driver actions for validaton purposes
-    return (
-      <Form
-        style={{ marginTop: '30px' }}
-        onSubmit={() => signals.signinRequested(formDriver.getValidationData())}
-      >
-        <Input ...bindings.inputEmailProps('email', { required: true })/>
-        <Input ...bindings.inputPasswordProps('password', { required: true })/>
-        <Button type="submit">{t.submitButton()}</Button>
-      </Form>
-    );
+export default (module) => {
+  module.state({
+    username: '',
+    password: ''
+  })
+
+  // register module signals
+  module.signals({
+    signinSubmitted
+  })
+
+  // define the form
+  const form = {
+    fields: {
+      username: {
+        type: 'string', // supported types are string, int, float, date and time
+        validate (value, done) { //optional
+          done(value.length > 0 ? '' : 'username is required')
+        }
+      },
+      password: {
+        type: 'string',
+        validate (value, done) { // optional
+          done(value.length > 0 ? '' : 'password is required')
+        }
+      }
+    },
+    validate (values, done) { // optional
+      done()
+    },
+    onAfterValidate (args) { // optional
+      // args is the same as a an sync action method (state is writeable) with the
+      // following additions: fields, isValid, isFormValidation, isFieldValidation
+      //
+      // Since validation functions are async and do not have access to set state,
+      // this method can be used to update interdependent fields when their values
+      // change
+    }
   }
+
+  // return the module meta
+  return { Component, form }
 }
 ```
 
-The ui-driver also provides two actions that you can use in your signals to validate submitted forms and to clear the driver data after the form editing has completed.
+In your form ui component
 
 ```js
-// signin signal
+import { Component } from 'cerebral-view-snabbdom'
+import { Input, Form } from 'snabbdom-material'
+import driver from 'cerebral-module-ui-driver'
 
-import controller from './path/to/cerebral/controller';
-import ajax from './path/to/actions/ajax';
-import showSnackbar from './path/to/actions/showSnackbar';
-import stateToOutput from 'cerebral-addons/stateToOutput';
-import { validateForm, resetFormDriver } from 'ui-driver/actions';
+export default Component(({ state, modules, signals }) => {
 
-controller.signal('signinRequested', [
-  validateForm, { // validateForm accepts all data passed by the onSubmit signal
-                  // and outputs success or error paths
+  // setup the ui driver bindings
+  const bind = driver({ module: modules.auth, modules, state })
+
+  return (
+    <Form {...bind.form(signals.auth.signinSubmitted)}>
+      <Input {...bind.input('username', { label: 'Username' })}/>
+      <Input {...bind.input('password', { label: 'Password', type: 'password' })}/>
+      <button type='submit'>Signin</button>
+    </Form>
+  )
+})
+```
+
+The ui-driver also provides actions that you can use in your signal chains to validate submitted forms and to clear the driver data after the form editing has completed.
+
+```js
+import signin from '../actions/signin'
+import validateForm from 'cerebral-module-ui-driver/chains/validate'
+import resetFormDriver from 'cerebral-module-ui-driver/actions/reset'
+
+export default [
+  ...validateForm, {
     success: [
-      stateToOutput('signin', 'data'),
-      [ajax.post('/api/signin'), {
+      [signin, {
         success: [
-          resetFormDriver('signin') // tidy up the temp driver form data
-                                    // from the central state tree
+          resetFormDriver
         ],
         error: [
-          ...showSnackbar('signin')
+          showErrorMessage
         ]
       }]
     ],
-    error: showSnackbar('signin', 'hasValidationErrors')
+    error: [
+      showErrorMessage
+    ]
   }
-]);
-```
-
-## Setup
-
-### one time
-
-The ui-driver has some internal signals that must be registered with your cerebral controller.
-
-```js
-import controller from './path/to/cerebral/controller';
-import registerSignals from 'ui-driver/registerSignals';
-
-registerSignals(controller);
-```
-
-### per form
-
-```js
-// static for the form
-const formDriver = driver.createForm(['signin']);
-```
-
-The state path passed to form is where all form field values will be stored by name.
-
-```js
-// component definition (react)
-@State(Object.assign({
-  locale: ['locale']
-}, formDriver.state()))
-export default class Signin extends Component {
-  // ...
-}
-
-// component definition (snabbdom)
-export default Component(formDriver.state(), ({
-  state,
-  signals
-}) => {
-  // ...
-});
-```
-
-```js
-// at the start of the form render
-const bindings = formDriver.getBindings({
-  state,   // cerebral state defined by 'formDriver.state()'
-  signals, // cerebral signals
-  t,       // optional - translation function
-  props   // optional - custom props to pass to all bindings
-});
+]
 ```
 
 ## Supported Bindings
 
-ui-driver currently supports the following bindings:
+ui-driver supports the following bindings (props are optional for all bindings):
 
 ### Checkbox
 
 Field value must be a bool
 
 ```js
-checkboxProps('fieldName', {
-  label: 'checkbox' // optional unless t is not given
-})
+<input {..bind.checkbox('fieldName', props)/>
 ```
 
-### Date
+### Form
 
-Field must be a date
-
-```js
-inputDateProps('fieldName', {
-  label: 'date',   // optional unless t is not given
-  required: true,  // optional
-  dateFormat: 'L', // optional, momentjs date format defaults to 'L'
-  messages: {      // optional, taken from t when given, defaults are shown
-    invalid: 'invalid',
-    required: 'required'
-  }
-})
-```
-
-### Email
-
-Field must be a string
+The form binding will prepare all the necessary data required for form level validation and pass it to the given `formSubmittedSignal`. This signal must apply the provided `validateForm` chain (see the example above).
 
 ```js
-inputEmailProps('fieldName', {
-  label: 'email',  // optional unless t is not given
-  required: true,  // optional
-  messages: {      // optional, taken from t when given, defaults are shown
-    invalid: 'invalid',
-    required: 'required'
-  }
-})
-```
-
-### Equals
-
-Field must be a string, field must === comparisonValue to validate
-
-```js
-inputEqualsProps('fieldName', comparisonValue, {
-  label: 'Confirm',      // optional unless t is not given
-  inputType: 'password', // optional
-  messages: {            // optional, taken from t when given, default is shown
-    invalid: 'invalid'
-  }
-})
+<form {...bind.form(formSubmittedSignal, props)}></form>
 ```
 
 ### Input
 
-Field must be a string
+Field value will be cast according to the type defined in the module
 
 ```js
-inputProps('fieldName', {
-  label: 'name',  // optional unless t is not given
-  required: true, // optional
-  messages: {     // optional, taken from t when given, defaults are shown
-    invalid: 'invalid',
-    required: 'required'
-  },
-  signalData: {   // optional, validation params
-    maxLength: 10
-  }
-})
-```
-
-### Int
-
-Field must be an int
-
-```js
-inputIntProps('fieldName', {
-  label: 'age',   // optional unless t is not given
-  required: true, // optional
-  messages: {     // optional, taken from t when given, defaults are shown
-    invalid: 'invalid',
-    required: 'required'
-  }
-})
+<input {...bind.input('fieldName', props)}/>
 ```
 
 ### Menu
@@ -266,85 +192,16 @@ inputIntProps('fieldName', {
 Menu consists of two bindings, one for the element that will open the menu (eg button) and one for the menu element itself.
 
 ```js
-menuOpenProps('menuName', {
-  eventType: 'onTouchTap' // optional, defaults to 'onTouchTap'
-})
-menuProps('menuName')
-```
-
-### Password
-
-Field must be a string
-
-```js
-inputPasswordProps('fieldName', {
-  label: 'password',   // optional unless t is not given
-  required: true,      // optional
-  checkStrength: true, // optional
-  messages: {          // optional, taken from t when given, defaults are shown
-    invalid: 'invalid',
-    required: 'required'
-  }
-  signalData: {        // optional, password strength
-    minLength = 8,     // config - defaults are shown
-    maxLength = 128,
-    minPhraseLength = 20,
-    minPassingTests = 3,
-    tests = [
-      /[a-z]/,
-      /[A-Z]/,
-      /[0-9]/,
-      /[^A-Za-z0-9]/
-    ]
-  }
-})
+<button {..bind.menuOpen('menuName', props)}>Open Menu</button>
+<Menu {...bind.menu('menuName', props)}></Menu>
 ```
 
 ### Select
 
-Field can be of any type but the selected value in the options collection must === the field value
+Field can be of any type but the selected value in the options collection must === the field value.
 
 ```js
-options = [
-  { value: 1, label: t['oneLabel']() }
-];
-
-selectProps('fieldName', options, {
-  label: 'options' // optional unless t is not given
-})
-```
-
-### Time
-
-Field must be an int which represents minutes from start of day
-
-```js
-inputTimeProps('fieldName', {
-  label: 'time',      // optional unless t is not given
-  required: true,     // optional
-  timeFormat: 'H:mm', // optional, momentjs time format defaults to 'H:mm'
-  messages: {         // optional, taken from t when given, defaults are shown
-    invalid: 'invalid',
-    required: 'required'
-  }
-})
-```
-
-## Side Effects
-
-Sometimes changing one form field has side effects on other parts of the form. With ui-driver this can be handled by SideEffects.
-
-```js
-// register a side affects handler for a specific form and field
-import driver from 'ui-driver';
-
-driver.registerSideEffect('formName', 'fieldName', function sideEffectFunction(field, value, state) {
-  // field: contains all kinds of data about the field that has been changed
-  // value: is the new value of the changing field (the value in the state is updated
-  //        after the sideEffect has executed
-  // state: is the cerebral state object provided to the syncronouse validateForm action,
-  //        use this to apply any side effects to the central state
-});
+<Select {...bind.select('fieldName', props)}/>
 ```
 
 ## Contribute
