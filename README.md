@@ -52,6 +52,8 @@ import auth from './modules/auth'
 const modules = {
   driver: driver({
     // driver options go here
+  }, {
+    // optional props maps here
   }),
   auth
 }
@@ -83,21 +85,24 @@ export default (module) => {
       username: {
         type: 'string', // supported types are string, int, float, date and time
         validate (value, done) { //optional
+          // called if type casting is successful
           done(value.length > 0 ? '' : 'username is required')
         }
       },
       password: {
         type: 'string',
         validate (value, done) { // optional
+          // called if type casting is successful
           done(value.length > 0 ? '' : 'password is required')
         }
       }
     },
     validate (values, done) { // optional
+      // called if all individual fields are valid
       done()
     },
     onAfterValidate (args) { // optional
-      // args is the same as a an sync action method (state is writeable) with the
+      // args are the same as any sync action method (state is writeable) with the
       // following additions: fields, isValid, isFormValidation, isFieldValidation
       //
       // Since validation functions are async and do not have access to set state,
@@ -137,6 +142,7 @@ The ui-driver also provides actions that you can use in your signal chains to va
 
 ```js
 import signin from '../actions/signin'
+import showErrorMessage from '../actions/showErrorMessage'
 import validateForm from 'cerebral-module-ui-driver/chains/validate'
 import resetFormDriver from 'cerebral-module-ui-driver/actions/reset'
 
@@ -202,6 +208,61 @@ Field can be of any type but the selected value in the options collection must =
 
 ```js
 <Select {...bind.select('fieldName', props)}/>
+```
+
+## Configuration
+
+### Prop maps
+
+ui driver uses prop maps to allow each binding type to output different props depending on the ui library being used.
+
+These are the default settings: `base` applies to all unless overridden.
+
+```js
+const propsMaps = {
+  base: { // applies to all bindings unless overridden.
+    value: 'value',
+    onChange: 'onChange',
+    isValidating: 'isValidating',
+    isError: 'isError',
+    message: 'message',
+    type: 'type',
+    isOpen: 'isOpen',
+    onOpen: 'onOpen',
+    onClose: 'onClose'
+  },
+  form: { // additional props only used by form
+    onSubmit: 'onSubmit'
+  },
+  menuOpen: { // remap onOpen to onClick for menuOpen binding
+    onOpen: 'onClick'
+  }
+}
+
+const modules = {
+  driver: driver({
+    // other driver options go here
+  }, propsMaps),
+  auth
+}
+```
+
+### General settings
+
+Here you can see the general configuration options with their default values:
+
+```js
+const modules = {
+  driver: driver({
+    dateFormat: 'L', // see moment.js
+    timeFormat: 'H:mm', // see moment.js
+    invalidDateMessage: 'invalid date',
+    invalidNumberMessage: 'invalid number',
+    invalidTimeMessage: 'invalid time',
+    invalidMessage: 'form has validation errors'
+  }),
+  auth
+}
 ```
 
 ## Contribute
