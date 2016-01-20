@@ -1,13 +1,11 @@
 import getMeta from '../helpers/getMeta'
 
 function format (value, formatter) {
-  if (typeof formatter === 'function') {
-    return formatter(value)
-  }
-  if (typeof value !== 'string') {
-    return typeof value !== 'undefined' && value !== null ? '' : `${value}`
-  }
-  return value
+  return typeof formatter === 'function'
+    ? formatter(value)
+    : value === undefined || value === null
+      ? ''
+      : `${value}`
 }
 
 export default function ({
@@ -24,8 +22,11 @@ export default function ({
     const meta = getMeta(state, driverPath) || {}
     const useInputValue = typeof meta.value !== 'undefined' && meta.value !== null
     const field = (formModule.meta.form && formModule.meta.form.fields && formModule.meta.form.fields[fieldName]) || {}
-    const formattedValue = noFormatting ? formValue : format(formValue, driverModule.meta.options.formatters[field.type])
-    const value = useInputValue ? meta.value : formattedValue
+    const value = useInputValue
+      ? meta.value
+      : noFormatting
+        ? formValue
+        : format(formValue, driverModule.meta.options.formatters[field.type])
 
     // if the field is not formatted then it should't be cast
     field.noCasting = noFormatting
@@ -34,7 +35,7 @@ export default function ({
       [propsMap['value']]: value,
       [propsMap['isError']]: !!meta.error,
       [propsMap['isValidating']]: !!meta.isValidating,
-      [propsMap['message']]: !meta.error && useInputValue && formattedValue !== value ? formattedValue : meta.error,
+      [propsMap['message']]: meta.error,
       [propsMap['onChange']]: function (e) {
         driverModule.meta.signals.valueChanged({
           moduleName: formModule.name,

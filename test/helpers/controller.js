@@ -14,7 +14,9 @@ controller.reset = () => {
 // register the driver module
 controller.modules({
   driver: driver({
-    debounceTimeout: 0
+    debounceTimeout: 0,
+    dateFormat: 'YYYY-MM-DD',
+    timeFormat: 'HH:mm'
   }),
   form
 })

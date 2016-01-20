@@ -18,7 +18,7 @@ describe('bindings', function () {
   describe('input', function () {
     beforeEach(function () {
       tree = controller.model.tree
-      tree.set({ form: { email: '', number: 0 } })
+      tree.set({ form: { email: '', number: 0, date: null, time: null } })
       tree.commit()
     })
 
@@ -62,7 +62,7 @@ describe('bindings', function () {
       return promise
     })
 
-    it('casts types', function () {
+    it('casts numbers', function () {
       let props = bind().input('number')
       const promise = onSignalEnd(controller, function () {
         props = bind().input('number', { type: 'number' })
@@ -70,11 +70,49 @@ describe('bindings', function () {
         expect(props.value).to.equal('5')
         expect(props.isError).to.be.false
         expect(props.isValidating).to.be.false
-        expect(props.message).to.equal('')
+        expect(props.message).to.be.undefined
         expect(props.onChange).to.be.a.function
         expect(props.type).to.equal('number')
       })
       props.onChange({ target: { value: '5' } })
+      return promise
+    })
+
+    it('casts dates', function () {
+      let props = bind().input('date')
+      expect(props.value).to.equal('')
+      expect(props.isError).to.be.false
+      expect(props.isValidating).to.be.false
+      expect(props.message).to.be.undefined
+      expect(props.onChange).to.be.a.function
+      const promise = onSignalEnd(controller, function () {
+        props = bind().input('date')
+        expect(tree.get(['form', 'date'])).to.eql(new Date('2012-12-12'))
+        expect(props.value).to.equal('2012-12-12')
+        expect(props.isError).to.be.false
+        expect(props.isValidating).to.be.false
+        expect(props.message).to.be.undefined
+      })
+      props.onChange({ target: { value: '2012-12-12' } })
+      return promise
+    })
+
+    it('casts times', function () {
+      let props = bind().input('time')
+      expect(props.value).to.equal('')
+      expect(props.isError).to.be.false
+      expect(props.isValidating).to.be.false
+      expect(props.message).to.be.undefined
+      expect(props.onChange).to.be.a.function
+      const promise = onSignalEnd(controller, function () {
+        props = bind().input('time')
+        expect(tree.get(['form', 'time'])).to.equal(60)
+        expect(props.value).to.equal('01:00')
+        expect(props.isError).to.be.false
+        expect(props.isValidating).to.be.false
+        expect(props.message).to.be.undefined
+      })
+      props.onChange({ target: { value: '01:00' } })
       return promise
     })
 

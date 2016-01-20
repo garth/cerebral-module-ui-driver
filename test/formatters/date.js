@@ -10,4 +10,8 @@ describe('formatters.date', function () {
   it('turns null into an empty string', function () {
     expect(format(null)).to.equal('')
   })
+
+  it('turns undefined into an empty string', function () {
+    expect(format(undefined)).to.equal('')
+  })
 })

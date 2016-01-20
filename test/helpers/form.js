@@ -30,6 +30,12 @@ export default module => {
             done(value > 10 ? 'too big' : '')
           }
         },
+        date: {
+          type: 'date'
+        },
+        time: {
+          type: 'time'
+        },
         select: {
           type: 'int'
         },
