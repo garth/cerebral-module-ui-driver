@@ -1,6 +1,6 @@
 {
   "name": "cerebral-module-ui-driver",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "A driver for connecting ui components to cerebral",
   "main": "lib/driver.js",
   "scripts": {
@@ -48,9 +48,6 @@
     "snazzy": "^2.0.1",
     "standard": "^5.4.1",
     "watch": "^0.17.1"
-  },
-  "dependencies": {
-    "email-validator": "^1.0.3"
   },
   "peerDependencies": {
     "cerebral": "^0.32.0",
