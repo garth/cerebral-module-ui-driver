@@ -18,7 +18,12 @@ describe('bindings', function () {
   describe('input', function () {
     beforeEach(function () {
       tree = controller.model.tree
-      tree.set({ form: { email: '', number: 0, date: null, time: null } })
+      tree.set({ form: {
+        email: '',
+        number: 0,
+        date: new Date('2016-01-01T11:21:09+01:00'),
+        time: null
+      }})
       tree.commit()
     })
 
@@ -80,7 +85,7 @@ describe('bindings', function () {
 
     it('casts dates', function () {
       let props = bind().input('date')
-      expect(props.value).to.equal('')
+      expect(props.value).to.equal('2016-01-01')
       expect(props.isError).to.be.false
       expect(props.isValidating).to.be.false
       expect(props.message).to.be.undefined

@@ -1,8 +1,8 @@
 import getMeta from '../helpers/getMeta'
 
-function format (value, formatter) {
+function format (value, formatter, options) {
   return typeof formatter === 'function'
-    ? formatter(value)
+    ? formatter(value, options)
     : value === undefined || value === null
       ? ''
       : `${value}`
@@ -19,6 +19,7 @@ export default function ({
     const statePath = [...formModule.path, fieldName]
     const driverPath = [...driverModule.path, ...formModule.path, 'fields', fieldName]
     const formValue = getMeta(state, statePath)
+    const options = driverModule.meta.options
     const meta = getMeta(state, driverPath) || {}
     const useInputValue = typeof meta.value !== 'undefined' && meta.value !== null
     const field = (formModule.meta.form && formModule.meta.form.fields && formModule.meta.form.fields[fieldName]) || {}
@@ -26,7 +27,7 @@ export default function ({
       ? meta.value
       : noFormatting
         ? formValue
-        : format(formValue, driverModule.meta.options.formatters[field.type])
+        : format(formValue, options.formatters[field.type], options)
 
     // if the field is not formatted then it should't be cast
     field.noCasting = noFormatting
