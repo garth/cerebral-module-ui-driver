@@ -1,3 +1,5 @@
+import blurred from './chains/blurred'
+import focused from './chains/focused'
 import isOpenChanged from './chains/isOpenChanged'
 import valueChanged from './chains/valueChanged'
 import defaultPropsMaps from './propsMaps'
@@ -31,7 +33,11 @@ export default (options = {}, propsMaps = {}) => {
     module.alias('cerebral-module-ui-driver')
 
     // register signals
-    module.signals({ isOpenChanged })
+    module.signals({
+      blurred,
+      focused,
+      isOpenChanged
+    })
     module.signalsSync({
       valueChanged: valueChanged(options.debounceTimeout || 200)
     })

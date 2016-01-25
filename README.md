@@ -229,7 +229,10 @@ const propsMaps = {
     type: 'type',
     isOpen: 'isOpen',
     onOpen: 'onOpen',
-    onClose: 'onClose'
+    onClose: 'onClose',
+    isFocused: 'isFocused',
+    onFocus: 'onFocus',
+    onBlur: 'onBlur'
   },
   form: { // additional props only used by form
     onSubmit: 'onSubmit'

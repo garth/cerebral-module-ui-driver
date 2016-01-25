@@ -8,7 +8,10 @@ export default {
     type: 'type',
     isOpen: 'isOpen',
     onOpen: 'onOpen',
-    onClose: 'onClose'
+    onClose: 'onClose',
+    isFocused: 'isFocused',
+    onFocus: 'onFocus',
+    onBlur: 'onBlur'
   },
   form: {
     onSubmit: 'onSubmit'

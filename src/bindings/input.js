@@ -18,6 +18,7 @@ export default function ({
   return function bindInput (fieldName, fieldProps = {}, noFormatting) {
     const statePath = [...formModule.path, fieldName]
     const driverPath = [...driverModule.path, ...formModule.path, 'fields', fieldName]
+    const isFocusedPath = [...driverPath, 'isFocused']
     const formValue = getMeta(state, statePath)
     const options = driverModule.meta.options
     const meta = getMeta(state, driverPath) || {}
@@ -45,6 +46,19 @@ export default function ({
             type: field.type,
             value: e.target.value
           }]
+        })
+      },
+      [propsMap['isFocused']]: !!meta.isFocused,
+      [propsMap['onFocus']]: function (e) {
+        driverModule.meta.signals.focused({
+          statePath: isFocusedPath,
+          value: true
+        })
+      },
+      [propsMap['onBlur']]: function (e) {
+        driverModule.meta.signals.blurred({
+          statePath: isFocusedPath,
+          value: false
         })
       }
     }, { type: 'text' }, props, fieldProps)
