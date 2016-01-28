@@ -33,13 +33,11 @@ export default (options = {}, propsMaps = {}) => {
     module.alias('cerebral-module-ui-driver')
 
     // register signals
-    module.signals({
+    module.addSignals({
       blurred,
       focused,
-      isOpenChanged
-    })
-    module.signalsSync({
-      valueChanged: valueChanged(options.debounceTimeout || 200)
+      isOpenChanged,
+      valueChanged: { chain: valueChanged(options.debounceTimeout || 200), sync: true }
     })
 
     return {

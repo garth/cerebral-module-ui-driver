@@ -2,12 +2,12 @@ import validate from '../../src/chains/validate'
 import reset from '../../src/actions/reset'
 
 export default module => {
-  module.state({
+  module.addState({
     email: '',
     number: 0,
     acceptTerms: false
   })
-  module.signals({
+  module.addSignals({
     submitForm: [
       ...validate, {
         success: [

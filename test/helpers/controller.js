@@ -12,7 +12,7 @@ controller.reset = () => {
 }
 
 // register the driver module
-controller.modules({
+controller.addModules({
   driver: driver({
     debounceTimeout: 0,
     dateFormat: 'YYYY-MM-DD',
