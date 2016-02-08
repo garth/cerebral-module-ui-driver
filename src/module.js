@@ -30,8 +30,6 @@ export default (options = {}, propsMaps = {}) => {
 
   // prepare the module
   return (module) => {
-    module.alias('cerebral-module-ui-driver')
-
     // register signals
     module.addSignals({
       blurred,

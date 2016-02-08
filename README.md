@@ -37,7 +37,7 @@ npm install cerebral-module-ui-driver
 
 ## Usage
 
-The ui driver assumes that each form in your application will be placed in its own module. This is not a bad assumption as this will encourge modular and well structured cerebral applications.
+The ui-driver assumes that each form in your application will be placed in its own module. This is not a bad assumption as this will encourage modular and well structured cerebral applications.
 
 From your main.js
 
@@ -49,33 +49,29 @@ import driver from 'cerebral-module-ui-driver/module'
 import auth from './modules/auth'
 
 // configure modules
-const modules = {
+controller.addModules({
   driver: driver({
     // driver options go here
   }, {
     // optional props maps here
   }),
   auth
-}
-
-// init the modules
-controller.modules(modules)
+})
 ```
 
-In your form module you need to define your form fields and specify optional validation. All validation methods are async and need to call `done([errorMessageString])` when complete. ui driver will debounce validation calls by default, but will ensure that the final validation check goes through before allowing the form to be submitted.
+In your form module you need to define your form fields and specify optional validation. All validation methods are async and need to call `done([errorMessageString])` when complete. ui-driver will debounce validation calls by default, but will ensure that the final validation check goes through before allowing the form to be submitted.
 
 ```js
-import Component from './components'
 import signinSubmitted from './chains/signinSubmitted'
 
 export default (module) => {
-  module.state({
+  module.addState({
     username: '',
     password: ''
   })
 
   // register module signals
-  module.signals({
+  module.addSignals({
     signinSubmitted
   })
 
@@ -112,7 +108,7 @@ export default (module) => {
   }
 
   // return the module meta
-  return { Component, form }
+  return { form }
 }
 ```
 
@@ -123,10 +119,16 @@ import { Component } from 'cerebral-view-snabbdom'
 import { Input, Form } from 'snabbdom-material'
 import driver from 'cerebral-module-ui-driver'
 
-export default Component(({ state, modules, signals }) => {
+export default Component({
+  driver: driver.state('driver', 'form') // the state compute to get driver and form data
+}, ({
+  state,
+  modules,
+  signals
+}) => {
 
   // setup the ui driver bindings
-  const bind = driver({ module: modules.auth, modules, state })
+  const bind = driver.bind({ modules, state: state.driver })
 
   return (
     <Form {...bind.form(signals.auth.signinSubmitted)}>
@@ -143,15 +145,15 @@ The ui-driver also provides actions that you can use in your signal chains to va
 ```js
 import signin from '../actions/signin'
 import showErrorMessage from '../actions/showErrorMessage'
-import validateForm from 'cerebral-module-ui-driver/chains/validate'
-import resetFormDriver from 'cerebral-module-ui-driver/actions/reset'
+import validate from 'cerebral-module-ui-driver/chains/validate'
+import reset from 'cerebral-module-ui-driver/actions/reset'
 
 export default [
-  ...validateForm, {
+  ...validate, { // validate the auth form
     success: [
       [signin, {
         success: [
-          resetFormDriver('auth')
+          reset // reset the driver state for the auth form
         ],
         error: [
           showErrorMessage

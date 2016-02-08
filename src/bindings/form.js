@@ -8,8 +8,7 @@ export default function ({
   propsMap
 }) {
   return function bindForm (signal, fieldProps) {
-    const driverPath = [...driverModule.path, ...formModule.path]
-    const meta = getMeta(state, driverPath) || {}
+    const meta = getMeta(state, ['driver', ...formModule.path]) || {}
     const formFields = (formModule.meta.form && formModule.meta.form.fields) || {}
 
     const fields = Object.keys(formFields).map((name) => {
@@ -25,8 +24,9 @@ export default function ({
       [propsMap['message']]: meta.error,
       [propsMap['onSubmit']]: function onSubmit () {
         signal({
-          validateForm: true,
+          driverModuleName: driverModule.name,
           moduleName: formModule.name,
+          validateForm: true,
           fields
         })
       }

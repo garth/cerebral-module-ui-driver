@@ -2,13 +2,13 @@
 import { expect } from 'chai'
 import onSignalEnd from '../helpers/onSignalEnd'
 import controller from '../helpers/controller'
-import driver from '../../src/driver'
+import driver from '../../src/bind'
+import state from '../../src/state'
 
 const modules = controller.getModules()
 const signals = modules.form.meta.signals
-let tree
 const bind = function () {
-  return driver({ module: modules.form, modules, state: tree.get() })
+  return driver({ modules, state: controller.get(state('driver', 'form')) })
 }
 
 describe('bindings', function () {
@@ -17,9 +17,11 @@ describe('bindings', function () {
   })
 
   describe('form', function () {
+    let tree
+
     beforeEach(function () {
       tree = controller.model.tree
-      tree.set({ form: { email: '', number: 12, 'select': 1, acceptTerms: false } })
+      tree.set({ form: { email: '', number: 12, select: 1, acceptTerms: false } })
       tree.commit()
     })
 
@@ -43,8 +45,8 @@ describe('bindings', function () {
       return promise
     })
 
-    it('return isError=false when the form is valid', function () {
-      tree.set({ form: { email: '', number: 10, 'select': 1, acceptTerms: true } })
+    it('returns isError=false when the form is valid', function () {
+      tree.set({ form: { email: '', number: 10, select: 1, acceptTerms: true } })
       tree.commit()
       let props = bind().form(signals.submitForm)
       const promise = onSignalEnd(controller, function () {

@@ -16,12 +16,10 @@ export default function ({
   propsMap
 }) {
   return function bindInput (fieldName, fieldProps = {}, noFormatting) {
-    const statePath = [...formModule.path, fieldName]
-    const driverPath = [...driverModule.path, ...formModule.path, 'fields', fieldName]
-    const isFocusedPath = [...driverPath, 'isFocused']
-    const formValue = getMeta(state, statePath)
+    const isFocusedPath = [...driverModule.path, ...formModule.path, 'fields', fieldName, 'isFocused']
+    const formValue = getMeta(state, ['form', fieldName])
     const options = driverModule.meta.options
-    const meta = getMeta(state, driverPath) || {}
+    const meta = getMeta(state, ['driver', ...formModule.path, 'fields', fieldName]) || {}
     const useInputValue = typeof meta.value !== 'undefined' && meta.value !== null
     const field = (formModule.meta.form && formModule.meta.form.fields && formModule.meta.form.fields[fieldName]) || {}
     const value = useInputValue
@@ -40,6 +38,7 @@ export default function ({
       [propsMap['message']]: meta.error,
       [propsMap['onChange']]: function (e) {
         driverModule.meta.signals.valueChanged({
+          driverModuleName: driverModule.name,
           moduleName: formModule.name,
           fields: [{
             name: fieldName,
@@ -49,13 +48,13 @@ export default function ({
         })
       },
       [propsMap['isFocused']]: !!meta.isFocused,
-      [propsMap['onFocus']]: function (e) {
+      [propsMap['onFocus']]: function () {
         driverModule.meta.signals.focused({
           statePath: isFocusedPath,
           value: true
         })
       },
-      [propsMap['onBlur']]: function (e) {
+      [propsMap['onBlur']]: function () {
         driverModule.meta.signals.blurred({
           statePath: isFocusedPath,
           value: false

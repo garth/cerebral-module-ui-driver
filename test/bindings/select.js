@@ -1,12 +1,12 @@
 /*global beforeEach,afterEach,describe,it*/
 import { expect } from 'chai'
 import controller from '../helpers/controller'
-import driver from '../../src/driver'
+import driver from '../../src/bind'
+import state from '../../src/state'
 
 const modules = controller.getModules()
-let tree
 const bind = function () {
-  return driver({ module: modules.form, modules, state: tree.get() })
+  return driver({ modules, state: controller.get(state('driver', 'form')) })
 }
 
 describe('bindings', function () {
@@ -16,7 +16,7 @@ describe('bindings', function () {
 
   describe('select', function () {
     beforeEach(function () {
-      tree = controller.model.tree
+      let tree = controller.model.tree
       tree.set({ form: { select: 1 } })
       tree.commit()
     })

@@ -1,4 +1,5 @@
-export default (moduleName) => function resetDriver ({ module, modules, state }) {
-  const driverModule = modules['cerebral-module-ui-driver']
-  state.set([...driverModule.path, moduleName], {})
+export default function resetDriver ({ modules, input: { driverModuleName, moduleName }, state }) {
+  const driverModule = modules[driverModuleName]
+  const formModule = modules[moduleName]
+  state.set([...driverModule.path, ...formModule.path], {})
 }

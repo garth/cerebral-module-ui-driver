@@ -1,5 +1,5 @@
-export default function beginValidate ({ modules, input: { validateForm, moduleName, fields }, state, output }) {
-  const driverModule = modules['cerebral-module-ui-driver']
+export default function beginValidate ({ modules, input: { driverModuleName, validateForm, moduleName, fields }, state, output }) {
+  const driverModule = modules[driverModuleName]
   const formModule = modules[moduleName]
   const form = formModule.meta.form
   const driverOptions = driverModule.meta.options
