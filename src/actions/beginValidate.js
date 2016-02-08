@@ -6,11 +6,11 @@ export default function validate ({ module, modules, input: { moduleName, fields
   const driverOptions = driverModule.meta.options
   const formOptions = form.driverOptions || {}
   const values = []
-  const fieldNames = fields.map(field => field.name)
+  const fieldNames = fields.map((field) => field.name)
 
   let isValid = true
 
-  fields.forEach(field => {
+  fields.forEach((field) => {
     // get the value and check its type
     const fieldPath = `${moduleName}.fields.${field.name}`
     let value

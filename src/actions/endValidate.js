@@ -14,7 +14,7 @@ export default function validate (args) {
     driverModule.state.set([moduleName, 'isValid'], isValid)
   }
 
-  fields.forEach(field => {
+  fields.forEach((field) => {
     isValid = isValid && field.isValid
     driverModule.state.set(`${moduleName}.fields.${field.name}`, field)
   })

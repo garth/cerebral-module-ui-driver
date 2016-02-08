@@ -12,7 +12,7 @@ export default function ({
     const meta = getMeta(state, driverPath) || {}
     const formFields = (formModule.meta.form && formModule.meta.form.fields) || {}
 
-    const fields = Object.keys(formFields).map(name => {
+    const fields = Object.keys(formFields).map((name) => {
       return {
         name,
         type: formFields[name].type

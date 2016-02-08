@@ -20,7 +20,7 @@ export default (options = {}, propsMaps = {}) => {
   options.invalidTimeMessage = options.invalidTimeMessage || 'invalid time'
   options.invalidMessage = options.invalidMessage || 'form has validation errors'
   // configure props maps
-  options.bindingTypes.forEach(binding => {
+  options.bindingTypes.forEach((binding) => {
     propsMaps[binding] = Object.assign({},
       defaultPropsMaps.base,
       propsMaps.base,

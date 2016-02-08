@@ -13,7 +13,7 @@ export default function validate ({
   const formModule = modules[moduleName]
   const form = formModule.meta.form
 
-  Promise.all(fields.map(field => new Promise(resolve => {
+  Promise.all(fields.map((field) => new Promise((resolve) => {
     form.fields[field.name].validate(field.typedValue, function (error) {
       field.isValidating = false
       if (error) {
@@ -22,13 +22,13 @@ export default function validate ({
       }
       resolve(field)
     })
-  }))).then(values => {
+  }))).then((values) => {
     if (validateForm && typeof form.validate === 'function') {
       const allFields = driverModule.state.get([moduleName, 'fields'])
       form.validate(Object.keys(allFields).reduce((data, name) => {
         data[name] = allFields[name].typedValue
         return data
-      }, {}), error => output({ moduleName, fields: values, error, fieldNames }))
+      }, {}), (error) => output({ moduleName, fields: values, error, fieldNames }))
     } else {
       output({ moduleName, fields: values, fieldNames })
     }

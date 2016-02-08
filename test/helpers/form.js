@@ -1,7 +1,7 @@
 import validate from '../../src/chains/validate'
 import reset from '../../src/actions/reset'
 
-export default module => {
+export default (module) => {
   module.addState({
     email: '',
     number: 0,
