@@ -1,14 +1,4 @@
-export default function validate ({
-  module,
-  modules,
-  input: {
-    moduleName,
-    fields,
-    validateForm,
-    fieldNames
-  },
-  output
-}) {
+export default function doValidate ({ modules, input: { moduleName, fields, validateForm, fieldNames }, state, output }) {
   const driverModule = modules['cerebral-module-ui-driver']
   const formModule = modules[moduleName]
   const form = formModule.meta.form
@@ -24,7 +14,7 @@ export default function validate ({
     })
   }))).then((values) => {
     if (validateForm && typeof form.validate === 'function') {
-      const allFields = driverModule.state.get([moduleName, 'fields'])
+      const allFields = state.get([...driverModule.path, moduleName, 'fields'])
       form.validate(Object.keys(allFields).reduce((data, name) => {
         data[name] = allFields[name].typedValue
         return data

@@ -11,7 +11,7 @@ export default (module) => {
     submitForm: [
       ...validate, {
         success: [
-          reset
+          reset('form')
         ],
         error: []
       }

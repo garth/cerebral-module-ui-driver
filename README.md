@@ -151,7 +151,7 @@ export default [
     success: [
       [signin, {
         success: [
-          resetFormDriver
+          resetFormDriver('auth')
         ],
         error: [
           showErrorMessage

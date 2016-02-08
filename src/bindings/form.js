@@ -25,6 +25,7 @@ export default function ({
       [propsMap['message']]: meta.error,
       [propsMap['onSubmit']]: function onSubmit () {
         signal({
+          validateForm: true,
           moduleName: formModule.name,
           fields
         })

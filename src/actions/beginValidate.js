@@ -1,5 +1,4 @@
-export default function validate ({ module, modules, input: { moduleName, fields }, output }) {
-  const singleField = module.meta.isUiDriverModule
+export default function beginValidate ({ modules, input: { validateForm, moduleName, fields }, state, output }) {
   const driverModule = modules['cerebral-module-ui-driver']
   const formModule = modules[moduleName]
   const form = formModule.meta.form
@@ -12,19 +11,19 @@ export default function validate ({ module, modules, input: { moduleName, fields
 
   fields.forEach((field) => {
     // get the value and check its type
-    const fieldPath = `${moduleName}.fields.${field.name}`
+    const fieldPath = [moduleName, 'fields', field.name]
     let value
-    if (singleField) {
+    if (!validateForm) {
       // single field validation values come from input and may need to be cast
       value = !field.noCasting && field.type && driverOptions.casts[field.type]
         ? driverOptions.casts[field.type](field.value, Object.assign({}, driverOptions, formOptions))
         : { isTypeValid: true, typedValue: field.value }
     } else {
       // form validation values come from state (previous single field validation result is used if found)
-      value = driverModule.state.get(fieldPath)
+      value = state.get([...driverModule.path, ...fieldPath])
       value = value ? Object.assign({}, value) : {
         isTypeValid: true,
-        typedValue: formModule.state.get(field.name)
+        typedValue: state.get([...formModule.path, field.name])
       }
     }
     value.name = field.name
@@ -32,7 +31,7 @@ export default function validate ({ module, modules, input: { moduleName, fields
     if (value.isTypeValid) {
       value.isValid = true
       // update the form value
-      formModule.state.set(field.name, value.typedValue)
+      state.set([...formModule.path, field.name], value.typedValue)
       // validate the value
       const formField = form.fields[field.name] || {}
       if (typeof formField.validate === 'function') {
@@ -46,11 +45,11 @@ export default function validate ({ module, modules, input: { moduleName, fields
     }
 
     // update the driver form value
-    driverModule.state.set(fieldPath, value)
+    state.set([...driverModule.path, ...fieldPath], value)
   })
 
-  driverModule.state.set([moduleName, 'error'], isValid ? '' : formOptions.invalidMessage || driverOptions.invalidMessage)
-  driverModule.state.set([moduleName, 'isValidating'], true)
+  state.set([...driverModule.path, moduleName, 'error'], isValid ? '' : formOptions.invalidMessage || driverOptions.invalidMessage)
+  state.set([...driverModule.path, moduleName, 'isValidating'], true)
 
-  output({ moduleName, fields: values, validateForm: !singleField, fieldNames })
+  output({ moduleName, fields: values, validateForm, fieldNames })
 }
