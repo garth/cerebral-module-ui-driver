@@ -1,6 +1,6 @@
 {
   "name": "cerebral-module-ui-driver",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "A driver for connecting ui components to cerebral",
   "main": "lib/index.js",
   "scripts": {
