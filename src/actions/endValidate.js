@@ -16,11 +16,13 @@ export default function endValidate (args) {
 
   fields.forEach((field) => {
     isValid = isValid && field.isValid
-    state.set([...driverModule.path, ...formModule.path, 'fields', field.name], field)
+    state.merge([...driverModule.path, ...formModule.path, 'fields', field.name], field)
   })
 
   state.set([...driverModule.path, ...formModule.path, 'isValidating'], false)
-  state.set([...driverModule.path, ...formModule.path, 'error'], isValid ? null : formOptions.invalidMessage || driverOptions.invalidMessage)
+  state.set([...driverModule.path, ...formModule.path, 'error'], isValid
+    ? null
+    : formOptions.invalidMessage || driverOptions.invalidMessage)
 
   if (typeof form.onAfterValidate === 'function') {
     form.onAfterValidate(Object.assign({}, args, {

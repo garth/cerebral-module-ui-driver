@@ -30,6 +30,7 @@ export default function beginValidate ({ modules, input: { driverModuleName, val
 
     if (value.isTypeValid) {
       value.isValid = true
+      value.error = null
       // update the form value
       state.set([...formModule.path, field.name], value.typedValue)
       // validate the value
@@ -45,7 +46,7 @@ export default function beginValidate ({ modules, input: { driverModuleName, val
     }
 
     // update the driver form value
-    state.set([...driverModule.path, ...fieldPath], value)
+    state.merge([...driverModule.path, ...fieldPath], value)
   })
 
   state.set([...driverModule.path, moduleName, 'error'], isValid ? '' : formOptions.invalidMessage || driverOptions.invalidMessage)
