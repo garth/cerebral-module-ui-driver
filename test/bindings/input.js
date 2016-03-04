@@ -46,7 +46,7 @@ describe('bindings', function () {
         expect(props.value).to.equal('test')
         expect(props.isError).to.be.false
         expect(props.isValidating).to.be.false
-        expect(props.message).to.be.undefined
+        expect(props.message).to.be.null
         expect(props.onChange).to.be.a.function
         expect(props.type).to.equal('text')
       })
@@ -77,7 +77,7 @@ describe('bindings', function () {
         expect(props.value).to.equal('5')
         expect(props.isError).to.be.false
         expect(props.isValidating).to.be.false
-        expect(props.message).to.be.undefined
+        expect(props.message).to.be.null
         expect(props.onChange).to.be.a.function
         expect(props.type).to.equal('number')
       })
@@ -98,7 +98,7 @@ describe('bindings', function () {
         expect(props.value).to.equal('2012-12-12')
         expect(props.isError).to.be.false
         expect(props.isValidating).to.be.false
-        expect(props.message).to.be.undefined
+        expect(props.message).to.be.null
       })
       props.onChange({ target: { value: '2012-12-12' } })
       return promise
@@ -117,7 +117,7 @@ describe('bindings', function () {
         expect(props.value).to.equal('01:00')
         expect(props.isError).to.be.false
         expect(props.isValidating).to.be.false
-        expect(props.message).to.be.undefined
+        expect(props.message).to.be.null
       })
       props.onChange({ target: { value: '01:00' } })
       return promise

@@ -37,7 +37,7 @@ describe('bindings', function () {
         props = bind().checkbox('acceptTerms')
         expect(props.value).to.be.true
         expect(props.isError).to.be.false
-        expect(props.message).to.be.undefined
+        expect(props.message).to.be.null
         expect(props.onChange).to.be.a.function
         expect(props.type).to.equal('checkbox')
       })

@@ -12,6 +12,7 @@ export default function beginValidate ({ modules, input: { driverModuleName, val
   fields.forEach((field) => {
     // get the value and check its type
     const fieldPath = [moduleName, 'fields', field.name]
+    const driverFieldPath = [...driverModule.path, ...fieldPath]
     let value
     if (!validateForm) {
       // single field validation values come from input and may need to be cast
@@ -20,7 +21,7 @@ export default function beginValidate ({ modules, input: { driverModuleName, val
         : { isTypeValid: true, typedValue: field.value }
     } else {
       // form validation values come from state (previous single field validation result is used if found)
-      value = state.get([...driverModule.path, ...fieldPath])
+      value = state.get(driverFieldPath)
       value = Object.assign({
         isTypeValid: true,
         typedValue: state.get([...formModule.path, field.name])
@@ -46,7 +47,11 @@ export default function beginValidate ({ modules, input: { driverModuleName, val
     }
 
     // update the driver form value
-    state.merge([...driverModule.path, ...fieldPath], value)
+    if (state.get(driverFieldPath)) {
+      state.merge(driverFieldPath, value)
+    } else {
+      state.set(driverFieldPath, value)
+    }
   })
 
   state.set([...driverModule.path, moduleName, 'error'], isValid ? '' : formOptions.invalidMessage || driverOptions.invalidMessage)
