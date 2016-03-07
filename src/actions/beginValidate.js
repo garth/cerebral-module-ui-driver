@@ -1,4 +1,15 @@
-export default function beginValidate ({ modules, input: { driverModuleName, validateForm, moduleName, fields }, state, output }) {
+export default function beginValidate (args) {
+  const {
+    modules,
+    input: {
+      driverModuleName,
+      fields,
+      moduleName,
+      validateForm
+    },
+    state,
+    output
+  } = args
   const driverModule = modules[driverModuleName]
   const formModule = modules[moduleName]
   const form = formModule.meta.form
@@ -54,7 +65,9 @@ export default function beginValidate ({ modules, input: { driverModuleName, val
     }
   })
 
-  state.set([...driverModule.path, moduleName, 'error'], isValid ? '' : formOptions.invalidMessage || driverOptions.invalidMessage)
+  state.set([...driverModule.path, moduleName, 'error'], isValid
+    ? ''
+    : formOptions.invalidMessage || driverOptions.invalidMessage)
   state.set([...driverModule.path, moduleName, 'isValidating'], true)
 
   output({ moduleName, fields: values, validateForm, fieldNames })

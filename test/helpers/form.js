@@ -26,7 +26,7 @@ export default (module) => {
         },
         number: {
           type: 'int',
-          validate (value, done) {
+          validate ({ value, done }) {
             done(value > 10 ? 'too big' : '')
           }
         },
@@ -43,10 +43,10 @@ export default (module) => {
           type: 'bool'
         }
       },
-      validate (values, done) {
+      validate ({ values, done }) {
         done()
       },
-      onAfterValidate ({input, state, output, services, fields, isValid, isFormValidation, isFieldValidation}) {
+      onAfterValidate ({ input, state, output, services, fields, isValid, isFormValidation, isFieldValidation }) {
         // console.log(fields)
       }
     }

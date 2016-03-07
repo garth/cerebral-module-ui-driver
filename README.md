@@ -80,14 +80,14 @@ export default (module) => {
     fields: {
       username: {
         type: 'string', // supported types are string, int, float, date and time
-        validate (value, done) { //optional
+        validate ({ value, done }) { //optional
           // called if type casting is successful
           done(value.length > 0 ? '' : 'username is required')
         }
       },
       password: {
         type: 'string',
-        validate (value, done) { // optional
+        validate ({ value, done }) { // optional
           // called if type casting is successful
           done(value.length > 0 ? '' : 'password is required')
         }

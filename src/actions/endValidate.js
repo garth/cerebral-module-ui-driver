@@ -1,5 +1,17 @@
 export default function endValidate (args) {
-  const { modules, input: { driverModuleName, moduleName, fields, error, fieldNames, validateForm }, state, output } = args
+  const {
+    modules,
+    input: {
+      driverModuleName,
+      error,
+      fieldNames,
+      fields,
+      moduleName,
+      validateForm
+    },
+    state,
+    output
+  } = args
   const driverModule = modules[driverModuleName]
   const formModule = modules[moduleName]
   const form = formModule.meta.form
