@@ -32,10 +32,10 @@ export default (options = {}, propsMaps = {}) => {
   return (module) => {
     // register signals
     module.addSignals({
-      blurred: { chain: blurred, sync: true },
-      focused: { chain: focused, sync: true },
+      blurred: { chain: blurred, immediate: true },
+      focused: { chain: focused, immediate: true },
       isOpenChanged,
-      valueChanged: { chain: valueChanged(options.debounceTimeout || 200), sync: true }
+      valueChanged: { chain: valueChanged(options.debounceTimeout || 200), immediate: true }
     })
 
     return {
