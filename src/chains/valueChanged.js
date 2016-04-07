@@ -12,6 +12,6 @@ export default function (debounceTimeout) {
         success: [],
         error: []
       }
-    ])
+    ], { immediate: false, throttle: false })
   ]
 }
