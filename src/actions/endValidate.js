@@ -1,4 +1,4 @@
-export default function endValidate (args) {
+export default function endValidate (context) {
   const {
     modules,
     input: {
@@ -11,7 +11,7 @@ export default function endValidate (args) {
     },
     state,
     output
-  } = args
+  } = context
   const driverModule = modules[driverModuleName]
   const formModule = modules[moduleName]
   const form = formModule.meta.form
@@ -37,7 +37,7 @@ export default function endValidate (args) {
     : formOptions.invalidMessage || driverOptions.invalidMessage)
 
   if (typeof form.onAfterValidate === 'function') {
-    form.onAfterValidate(Object.assign({}, args, {
+    form.onAfterValidate(Object.assign({}, context, {
       fields: fieldNames,
       isValid,
       isFormValidation: validateForm,

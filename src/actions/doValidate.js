@@ -1,4 +1,4 @@
-export default function doValidate (args) {
+export default function doValidate (context) {
   const {
     modules,
     input: {
@@ -10,13 +10,13 @@ export default function doValidate (args) {
     },
     state,
     output
-  } = args
+  } = context
   const driverModule = modules[driverModuleName]
   const formModule = modules[moduleName]
   const form = formModule.meta.form
 
   Promise.all(fields.map((field) => new Promise((resolve) => {
-    form.fields[field.name].validate(Object.assign({}, args, {
+    form.fields[field.name].validate(Object.assign({}, context, {
       value: field.typedValue,
       done (error) {
         field.isValidating = false
@@ -30,7 +30,7 @@ export default function doValidate (args) {
   }))).then((values) => {
     if (validateForm && typeof form.validate === 'function') {
       const allFields = state.get([...driverModule.path, ...formModule.path, 'fields'])
-      form.validate(Object.assign({}, args, {
+      form.validate(Object.assign({}, context, {
         values: Object.keys(allFields).reduce((data, name) => {
           data[name] = allFields[name].typedValue
           return data

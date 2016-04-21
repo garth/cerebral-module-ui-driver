@@ -1,4 +1,4 @@
-export default function beginValidate (args) {
+export default function beginValidate (context) {
   const {
     modules,
     input: {
@@ -9,7 +9,7 @@ export default function beginValidate (args) {
     },
     state,
     output
-  } = args
+  } = context
   const driverModule = modules[driverModuleName]
   const formModule = modules[moduleName]
   const form = formModule.meta.form
