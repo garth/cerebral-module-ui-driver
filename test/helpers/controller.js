@@ -1,5 +1,5 @@
-import Controller from 'cerebral'
-import Model from 'cerebral-model-baobab'
+import { Controller } from 'cerebral'
+import Model from 'cerebral/models/immutable'
 import driver from '../../src/module'
 import form from './form'
 

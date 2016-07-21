@@ -1,4 +1,4 @@
-import debounce from 'cerebral-addons/debounce'
+import debounce from 'cerebral/operators/debounce'
 import beginValidate from '../actions/beginValidate'
 import doValidate from '../actions/doValidate'
 import endValidate from '../actions/endValidate'
