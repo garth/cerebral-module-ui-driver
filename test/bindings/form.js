@@ -8,7 +8,7 @@ import state from '../../src/state'
 const modules = controller.getModules()
 const signals = modules.form.meta.signals
 const bind = function () {
-  return driver({ modules, state: state({ driverModuleName: 'driver', formModuleName: 'form' }).get(controller.get()) })
+  return driver({ modules, state: state({ form: 'form' }).get(controller.get()) })
 }
 
 describe('bindings', function () {

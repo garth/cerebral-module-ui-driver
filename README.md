@@ -120,7 +120,10 @@ import { Input, Form } from 'snabbdom-material'
 import driver from 'cerebral-module-ui-driver'
 
 export default Component({
-  driver: driver.state('driver', 'form') // the state compute to get driver and form data
+  driver: driver.state({ // the state computes to get driver and form data
+    driver: 'driver',    // optional driver module name, can be omitted it's called 'driver'
+    form: 'form'         // form module name, for nested modules use dot notation
+  })
 }, ({
   state,
   modules,

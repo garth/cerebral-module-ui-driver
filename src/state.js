@@ -1,18 +1,18 @@
 import { Computed } from 'cerebral'
 
-export default Computed(({driverModuleName, formModuleName}) => ({
-  driver: driverModuleName,
-  form: formModuleName
-}), ({driver, form, driverModuleName, formModuleName}) => {
-  // console.log(driver, form)
+export default Computed(({ driver = 'driver', form }) => ({
+  driverState: driver,
+  formState: form
+}), ({driver = 'driver', form, driverState, formState}) => {
+  console.log('Computed')
   return {
-    driver,
-    form,
+    driver: driverState,
+    form: formState,
     meta: {
-      driverModuleName,
-      driverModulePath: driverModuleName.split('.'),
-      formModuleName,
-      formModulePath: formModuleName.split('.')
+      driverModuleName: driver,
+      driverModulePath: driver.split('.'),
+      formModuleName: form,
+      formModulePath: form.split('.')
     }
   }
 })
