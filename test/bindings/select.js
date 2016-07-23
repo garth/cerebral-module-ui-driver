@@ -6,7 +6,7 @@ import state from '../../src/state'
 
 const modules = controller.getModules()
 const bind = function () {
-  return driver({ modules, state: controller.get(state('driver', 'form')) })
+  return driver({ modules, state: state({ driverModuleName: 'driver', formModuleName: 'form' }).get(controller.get()) })
 }
 
 describe('bindings', function () {
