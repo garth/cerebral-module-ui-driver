@@ -4,7 +4,6 @@ export default Computed(({ driver = 'driver', form }) => ({
   driverState: driver,
   formState: form
 }), ({driver = 'driver', form, driverState, formState}) => {
-  console.log('Computed')
   return {
     driver: driverState,
     form: formState,

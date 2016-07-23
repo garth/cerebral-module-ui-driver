@@ -1,11 +1,13 @@
 /*global beforeEach,afterEach,describe,it*/
 import { expect } from 'chai'
+import { Computed } from 'cerebral'
 import controller from '../helpers/controller'
 import driver from '../../src/bind'
 import state from '../../src/state'
 
 const modules = controller.getModules()
 const bind = function () {
+  Computed.cache = {}
   return driver({ modules, state: state({ form: 'form' }).get(controller.get()) })
 }
 
