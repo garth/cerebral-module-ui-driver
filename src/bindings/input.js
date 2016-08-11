@@ -15,7 +15,7 @@ export default function ({
   props,
   propsMap
 }) {
-  return function bindInput (fieldName, fieldProps = {}, noFormatting) {
+  return function bindInput (fieldName, fieldProps = {}, noFormatting, shouldUpdateFormValue) {
     const isFocusedPath = [...driverModule.path, ...formModule.path, 'fields', fieldName, 'isFocused']
     const formValue = getMeta(state, ['form', fieldName])
     const options = driverModule.meta.options
@@ -44,7 +44,8 @@ export default function ({
             name: fieldName,
             type: field.type,
             value: e.target.value
-          }]
+          }],
+          shouldUpdateFormValue
         })
       },
       [propsMap['isFocused']]: !!meta.isFocused,

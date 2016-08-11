@@ -5,7 +5,8 @@ export default function beginValidate (context) {
       driverModuleName,
       fields,
       moduleName,
-      validateForm
+      validateForm,
+      shouldUpdateFormValue = true
     },
     state,
     output
@@ -43,8 +44,12 @@ export default function beginValidate (context) {
     if (value.isTypeValid) {
       value.isValid = true
       value.error = null
-      // update the form value
-      state.set([...formModule.path, field.name], value.typedValue)
+
+      if (shouldUpdateFormValue) {
+        // update the form value
+        state.set([...formModule.path, field.name], value.typedValue)
+      }
+
       // validate the value
       const formField = form.fields[field.name] || {}
       if (typeof formField.validate === 'function') {
