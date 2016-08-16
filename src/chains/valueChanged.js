@@ -7,7 +7,7 @@ export default function (debounceTimeout) {
   return [
     beginValidate,
     debounce(debounceTimeout, [
-      [ doValidate ],
+      doValidate,
       endValidate, {
         success: [],
         error: []
