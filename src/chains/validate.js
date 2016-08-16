@@ -4,6 +4,6 @@ import endValidate from '../actions/endValidate'
 
 export default [
   beginValidate,
-  [ doValidate ],
+  doValidate,
   endValidate
 ]

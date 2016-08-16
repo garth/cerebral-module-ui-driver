@@ -1,6 +1,6 @@
 {
   "name": "cerebral-module-ui-driver",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "A driver for connecting ui components to cerebral",
   "main": "lib/index.js",
   "scripts": {
@@ -47,7 +47,7 @@
     "watch": "^0.19.1"
   },
   "peerDependencies": {
-    "cerebral": "^0.35.0",
+    "cerebral": "^0.35.0 || ^1.0.0",
     "cerebral-provider-modules": "^0.1.2",
     "moment": "^2.14.1"
   }
